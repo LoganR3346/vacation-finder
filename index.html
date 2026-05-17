@@ -8,221 +8,170 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --blue:#2563eb; --bg:#f1f5f9; --surface:#fff; --text:#0f172a; --muted:#64748b; --border:#e2e8f0; }
+    body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
 
-    :root {
-      --blue:    #2563eb;
-      --bg:      #f1f5f9;
-      --surface: #ffffff;
-      --text:    #0f172a;
-      --muted:   #64748b;
-      --border:  #e2e8f0;
+    /* HERO */
+    .hero { background:linear-gradient(140deg,#0f2a5e 0%,#1d4ed8 55%,#0369a1 100%); padding:70px 24px 50px; text-align:center; color:#fff; }
+    .hero h1 { font-size:clamp(1.9rem,5vw,3.4rem); font-weight:700; letter-spacing:-.03em; margin-bottom:12px; }
+    .hero p  { font-size:1.05rem; opacity:.82; max-width:500px; margin:0 auto 32px; line-height:1.6; }
+
+    /* City selector */
+    .city-label { font-size:.75rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; opacity:.7; margin-bottom:12px; }
+    .city-btns  { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+    .city-btn {
+      padding:7px 16px; border-radius:999px;
+      border:2px solid rgba(255,255,255,.3); background:rgba(255,255,255,.12);
+      color:rgba(255,255,255,.88); font-size:.83rem; font-weight:500;
+      cursor:pointer; font-family:'Inter',sans-serif;
+      transition:border-color .15s,background .15s,color .15s;
     }
+    .city-btn:hover  { border-color:rgba(255,255,255,.65); background:rgba(255,255,255,.22); color:#fff; }
+    .city-btn.active { background:#fff; border-color:#fff; color:var(--blue); font-weight:700; }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
-
-    /* ── Hero ── */
-    .hero {
-      background: linear-gradient(140deg, #0f2a5e 0%, #1d4ed8 55%, #0369a1 100%);
-      padding: 90px 24px 64px;
-      text-align: center;
-      color: #fff;
-    }
-    .hero h1 { font-size: clamp(2rem, 5vw, 3.6rem); font-weight: 700; letter-spacing: -0.03em; margin-bottom: 14px; }
-    .hero p  { font-size: 1.1rem; opacity: 0.82; max-width: 520px; margin: 0 auto; line-height: 1.6; }
-
-    /* ── Filter bar ── */
+    /* FILTER BAR */
     .filter-bar {
-      position: sticky; top: 0; z-index: 50;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 14px 24px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      position:sticky; top:0; z-index:50;
+      background:var(--surface); border-bottom:1px solid var(--border);
+      padding:13px 24px; box-shadow:0 2px 10px rgba(0,0,0,.07);
     }
-    .filters {
-      display: flex; gap: 8px; flex-wrap: wrap;
-      max-width: 1160px; margin: 0 auto; justify-content: center;
-    }
+    .filters { display:flex; gap:8px; flex-wrap:wrap; max-width:1160px; margin:0 auto; justify-content:center; }
     .filter-btn {
-      padding: 8px 20px; border-radius: 999px;
-      border: 2px solid var(--border); background: var(--surface);
-      color: var(--muted); font-size: 0.88rem; font-weight: 500;
-      cursor: pointer; transition: border-color .18s, color .18s, background .18s;
-      font-family: 'Inter', sans-serif; white-space: nowrap;
+      padding:7px 18px; border-radius:999px; border:2px solid var(--border);
+      background:var(--surface); color:var(--muted); font-size:.86rem; font-weight:500;
+      cursor:pointer; font-family:'Inter',sans-serif;
+      transition:border-color .18s,color .18s,background .18s; white-space:nowrap;
     }
-    .filter-btn:hover { border-color: var(--blue); color: var(--blue); }
-    .filter-btn.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .filter-btn:hover  { border-color:var(--blue); color:var(--blue); }
+    .filter-btn.active { background:var(--blue); border-color:var(--blue); color:#fff; }
 
-    /* ── Main ── */
-    .main { max-width: 1160px; margin: 36px auto 80px; padding: 0 24px; }
-    .results-row {
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 12px; margin-bottom: 24px;
-    }
-    .results-label { color: var(--muted); font-size: 0.88rem; }
+    /* MAIN */
+    .main { max-width:1160px; margin:34px auto 80px; padding:0 24px; }
+    .results-row { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:22px; }
+    .results-label { color:var(--muted); font-size:.87rem; }
 
     .shuffle-btn {
-      display: flex; align-items: center; gap: 8px;
-      padding: 9px 20px; border-radius: 999px;
-      border: 2px solid var(--blue); background: var(--blue); color: #fff;
-      font-size: 0.88rem; font-weight: 600; cursor: pointer;
-      font-family: 'Inter', sans-serif; transition: background .18s, transform .15s;
+      display:flex; align-items:center; gap:8px; padding:8px 18px;
+      border-radius:999px; border:2px solid var(--blue); background:var(--blue);
+      color:#fff; font-size:.86rem; font-weight:600; cursor:pointer;
+      font-family:'Inter',sans-serif; transition:background .18s,transform .15s;
     }
-    .shuffle-btn:hover  { background: #1d4ed8; }
-    .shuffle-btn:active { transform: scale(0.96); }
-    .shuffle-btn svg { width: 16px; height: 16px; fill: none; stroke: #fff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-    .spin { animation: spin .45s ease; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .shuffle-btn:hover  { background:#1d4ed8; }
+    .shuffle-btn:active { transform:scale(.96); }
+    .shuffle-btn svg { width:15px;height:15px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round; }
+    .spin { animation:spin .45s ease; }
+    @keyframes spin { to { transform:rotate(360deg); } }
 
-    /* ── Grid ── */
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 26px; }
+    /* GRID */
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:24px; }
 
-    /* ── Card ── */
+    /* CARD */
     .card {
-      background: var(--surface); border-radius: 18px; overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-      transition: transform .2s ease, box-shadow .2s ease;
-      animation: rise .35s ease both;
-      cursor: pointer;
+      background:var(--surface); border-radius:18px; overflow:hidden;
+      box-shadow:0 4px 20px rgba(0,0,0,.08); cursor:pointer;
+      transition:transform .2s,box-shadow .2s; animation:rise .35s ease both;
     }
-    @keyframes rise { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
-    .card:hover { transform: translateY(-5px); box-shadow: 0 14px 40px rgba(0,0,0,0.14); }
+    @keyframes rise { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+    .card:hover { transform:translateY(-5px); box-shadow:0 14px 40px rgba(0,0,0,.14); }
 
-    .card-img-wrap { position: relative; height: 210px; overflow: hidden; flex-shrink: 0; }
-    .card-img-bg {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 5rem; opacity: 0.3;
+    .card-img-wrap { position:relative; height:210px; overflow:hidden; }
+    .card-img-bg   { position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:5rem;opacity:.28; }
+    .card-img      { position:absolute;inset:0;width:100%;height:100%;object-fit:cover; }
+
+    /* Flight badge */
+    .flight-badge {
+      position:absolute; bottom:10px; right:10px;
+      background:rgba(0,0,0,.62); color:#fff;
+      padding:4px 11px; border-radius:999px;
+      font-size:.78rem; font-weight:700; letter-spacing:.01em;
+      backdrop-filter:blur(6px);
+      display:none;
     }
-    .card-img {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%; object-fit: cover;
-    }
 
-    .card-body { padding: 20px 22px 22px; }
-    .card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 11px; }
-    .tag { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 3px 10px; border-radius: 999px; }
-    .tag-beach     { background: #dbeafe; color: #1d4ed8; }
-    .tag-mountain  { background: #dcfce7; color: #166534; }
-    .tag-city      { background: #fef9c3; color: #854d0e; }
-    .tag-adventure { background: #fce7f3; color: #9d174d; }
-    .tag-cultural  { background: #f3e8ff; color: #6b21a8; }
+    .card-body { padding:18px 20px 22px; }
+    .card-tags { display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px; }
+    .tag { font-size:.69rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:3px 10px;border-radius:999px; }
+    .tag-beach     { background:#dbeafe;color:#1d4ed8; }
+    .tag-mountain  { background:#dcfce7;color:#166534; }
+    .tag-city      { background:#fef9c3;color:#854d0e; }
+    .tag-adventure { background:#fce7f3;color:#9d174d; }
+    .tag-cultural  { background:#f3e8ff;color:#6b21a8; }
 
-    .card-name     { font-size: 1.2rem; font-weight: 700; margin-bottom: 3px; }
-    .card-location { font-size: 0.84rem; color: var(--muted); margin-bottom: 10px; }
-    .card-desc     { font-size: 0.9rem; line-height: 1.65; color: #475569; margin-bottom: 16px;
-                     display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .card-name     { font-size:1.17rem;font-weight:700;margin-bottom:3px; }
+    .card-location { font-size:.83rem;color:var(--muted);margin-bottom:9px; }
+    .card-desc     { font-size:.89rem;line-height:1.65;color:#475569;margin-bottom:14px;
+                     display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden; }
+    .card-meta { display:flex;justify-content:space-between;align-items:flex-end;padding-top:13px;border-top:1px solid var(--border);gap:10px; }
+    .meta-left { display:flex;flex-direction:column;gap:3px; }
+    .rating    { font-size:.86rem;font-weight:600;display:flex;align-items:center;gap:5px; }
+    .stars     { color:#f59e0b;letter-spacing:-1px; }
+    .best-time { font-size:.77rem;color:var(--muted); }
+    .price { font-weight:700;font-size:.91rem;white-space:nowrap; }
+    .p1{color:#16a34a} .p2{color:#ca8a04} .p3{color:#dc2626}
+    .card-hint { font-size:.76rem;color:var(--blue);font-weight:500;margin-top:10px; }
 
-    .card-meta {
-      display: flex; justify-content: space-between; align-items: flex-end;
-      padding-top: 14px; border-top: 1px solid var(--border); gap: 12px;
-    }
-    .meta-left { display: flex; flex-direction: column; gap: 3px; }
-    .rating    { font-size: .88rem; font-weight: 600; display: flex; align-items: center; gap: 5px; }
-    .stars     { color: #f59e0b; letter-spacing: -1px; }
-    .best-time { font-size: .79rem; color: var(--muted); }
-    .price     { font-weight: 700; font-size: .93rem; white-space: nowrap; }
-    .p1 { color: #16a34a; } .p2 { color: #ca8a04; } .p3 { color: #dc2626; }
-
-    .card-hint { font-size: 0.78rem; color: var(--blue); font-weight: 500; margin-top: 12px; }
-
-    /* ── Modal overlay ── */
+    /* MODAL */
     .overlay {
-      position: fixed; inset: 0; z-index: 200;
-      background: rgba(15,26,45,0.6);
-      backdrop-filter: blur(4px);
-      display: flex; align-items: center; justify-content: center;
-      padding: 20px;
-      opacity: 0; pointer-events: none;
-      transition: opacity .25s ease;
+      position:fixed;inset:0;z-index:200;
+      background:rgba(15,26,45,.6);backdrop-filter:blur(4px);
+      display:flex;align-items:center;justify-content:center;padding:20px;
+      opacity:0;pointer-events:none;transition:opacity .25s;
     }
-    .overlay.open { opacity: 1; pointer-events: all; }
-
-    /* ── Modal panel ── */
+    .overlay.open { opacity:1;pointer-events:all; }
     .modal {
-      background: var(--surface);
-      border-radius: 22px; overflow: hidden;
-      width: 100%; max-width: 620px;
-      max-height: 90vh; overflow-y: auto;
-      box-shadow: 0 24px 80px rgba(0,0,0,0.25);
-      transform: translateY(24px) scale(0.97);
-      transition: transform .25s ease;
-      position: relative;
+      background:var(--surface);border-radius:22px;overflow:hidden;
+      width:100%;max-width:630px;max-height:90vh;overflow-y:auto;
+      box-shadow:0 24px 80px rgba(0,0,0,.25);position:relative;
+      transform:translateY(24px) scale(.97);transition:transform .25s;
     }
-    .overlay.open .modal { transform: translateY(0) scale(1); }
+    .overlay.open .modal { transform:translateY(0) scale(1); }
 
-    .modal-img-wrap { position: relative; height: 260px; overflow: hidden; flex-shrink: 0; }
-    .modal-img-bg {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 8rem; opacity: 0.3;
-    }
-    .modal-img {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%; object-fit: cover;
-    }
-
+    .modal-img-wrap { position:relative;height:250px;overflow:hidden;flex-shrink:0; }
+    .modal-img-bg   { position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:8rem;opacity:.28; }
+    .modal-img      { position:absolute;inset:0;width:100%;height:100%;object-fit:cover; }
     .modal-close {
-      position: absolute; top: 16px; right: 16px; z-index: 10;
-      width: 36px; height: 36px; border-radius: 50%;
-      background: rgba(0,0,0,0.45); border: none; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 1.1rem; font-weight: 700;
-      transition: background .15s;
+      position:absolute;top:14px;right:14px;z-index:10;
+      width:34px;height:34px;border-radius:50%;
+      background:rgba(0,0,0,.45);border:none;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;
+      color:#fff;font-size:1rem;font-weight:700;transition:background .15s;
     }
-    .modal-close:hover { background: rgba(0,0,0,0.7); }
+    .modal-close:hover { background:rgba(0,0,0,.7); }
 
-    .modal-body { padding: 26px 28px 32px; }
-    .modal-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
-    .modal-name { font-size: 1.6rem; font-weight: 700; letter-spacing: -.02em; margin-bottom: 4px; }
-    .modal-loc  { font-size: 0.9rem; color: var(--muted); margin-bottom: 14px; }
-    .modal-desc { font-size: 0.93rem; line-height: 1.7; color: #475569; margin-bottom: 22px; }
+    .modal-body { padding:24px 26px 30px; }
+    .modal-tags { display:flex;gap:6px;flex-wrap:wrap;margin-bottom:11px; }
+    .modal-name { font-size:1.55rem;font-weight:700;letter-spacing:-.02em;margin-bottom:3px; }
+    .modal-loc  { font-size:.88rem;color:var(--muted);margin-bottom:13px; }
+    .modal-desc { font-size:.92rem;line-height:1.7;color:#475569;margin-bottom:20px; }
+    .modal-divider { border:none;border-top:1px solid var(--border);margin-bottom:18px; }
+    .modal-section-title { font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:13px; }
 
-    .modal-divider { border: none; border-top: 1px solid var(--border); margin-bottom: 20px; }
+    .activities-list { list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:22px; }
+    .activity-item { display:flex;align-items:flex-start;gap:11px;padding:11px 13px;border-radius:12px;background:var(--bg); }
+    .activity-num  { width:23px;height:23px;border-radius:50%;background:var(--blue);color:#fff;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px; }
+    .activity-text { font-size:.89rem;line-height:1.5;color:#334155; }
 
-    .modal-section-title {
-      font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .08em; color: var(--muted); margin-bottom: 14px;
+    .modal-meta { display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-radius:14px;background:var(--bg);flex-wrap:wrap;gap:12px; }
+    .modal-meta-item { display:flex;flex-direction:column;gap:2px; }
+    .modal-meta-label { font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted); }
+    .modal-meta-value { font-size:.9rem;font-weight:600;color:var(--text); }
+    .modal-flight-row {
+      display:flex;align-items:center;gap:10px;
+      background:#eff6ff;border:1px solid #bfdbfe;
+      border-radius:12px;padding:12px 16px;margin-bottom:18px;
     }
-    .activities-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
-    .activity-item {
-      display: flex; align-items: flex-start; gap: 12px;
-      padding: 12px 14px; border-radius: 12px;
-      background: var(--bg);
-    }
-    .activity-num {
-      width: 24px; height: 24px; border-radius: 50%;
-      background: var(--blue); color: #fff;
-      font-size: 0.72rem; font-weight: 700;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; margin-top: 1px;
-    }
-    .activity-text { font-size: 0.9rem; line-height: 1.5; color: #334155; }
+    .modal-flight-icon { font-size:1.3rem; }
+    .modal-flight-text { font-size:.92rem;color:#1d4ed8;font-weight:600; }
+    .modal-flight-sub  { font-size:.78rem;color:#3b82f6;margin-top:1px; }
 
-    .modal-meta {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 16px 18px; border-radius: 14px; background: var(--bg);
-      flex-wrap: wrap; gap: 12px;
-    }
-    .modal-meta-item { display: flex; flex-direction: column; gap: 2px; }
-    .modal-meta-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
-    .modal-meta-value { font-size: 0.92rem; font-weight: 600; color: var(--text); }
+    .empty { grid-column:1/-1;text-align:center;padding:80px 0;color:var(--muted); }
+    .empty h3 { font-size:1.3rem;margin-bottom:6px; }
+    footer { text-align:center;padding:30px;font-size:.82rem;color:var(--muted);border-top:1px solid var(--border); }
 
-    /* ── Empty state ── */
-    .empty { grid-column: 1/-1; text-align: center; padding: 80px 0; color: var(--muted); }
-    .empty h3 { font-size: 1.3rem; margin-bottom: 6px; }
-
-    footer { text-align: center; padding: 32px; font-size: 0.82rem; color: var(--muted); border-top: 1px solid var(--border); }
-
-    @media (max-width: 560px) {
-      .grid { grid-template-columns: 1fr; }
-      .hero { padding: 60px 20px 44px; }
-      .results-row { flex-direction: column; align-items: flex-start; }
-      .modal-body { padding: 20px 20px 28px; }
+    @media(max-width:560px) {
+      .grid{grid-template-columns:1fr}
+      .hero{padding:50px 20px 40px}
+      .results-row{flex-direction:column;align-items:flex-start}
     }
   </style>
 </head>
@@ -230,7 +179,9 @@
 
 <section class="hero">
   <h1>🌍 Find Your Perfect Vacation</h1>
-  <p>Browse handpicked destinations worldwide. Filter by vibe, shuffle for new spots, and click any card for things to do.</p>
+  <p>Filter by vibe, shuffle for new spots, and click any card for things to do. Set your departure city to see flight times.</p>
+  <p class="city-label">Where are you flying from?</p>
+  <div class="city-btns" id="cityBtns"></div>
 </section>
 
 <div class="filter-bar">
@@ -249,10 +200,8 @@
     <p class="results-label" id="count"></p>
     <button class="shuffle-btn" id="shuffleBtn">
       <svg id="shuffleIcon" viewBox="0 0 24 24">
-        <polyline points="16 3 21 3 21 8"/>
-        <line x1="4" y1="20" x2="21" y2="3"/>
-        <polyline points="21 16 21 21 16 21"/>
-        <line x1="15" y1="15" x2="21" y2="21"/>
+        <polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/>
+        <polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/>
       </svg>
       Shuffle Destinations
     </button>
@@ -260,9 +209,8 @@
   <div class="grid" id="grid"></div>
 </main>
 
-<footer>VoyageFind &mdash; built for dreamers &amp; planners alike.</footer>
+<footer>VoyageFind — built for dreamers &amp; planners alike.</footer>
 
-<!-- Modal -->
 <div class="overlay" id="overlay">
   <div class="modal" id="modal">
     <div class="modal-img-wrap" id="modalImgWrap">
@@ -272,392 +220,412 @@
     </div>
     <button class="modal-close" id="modalClose">✕</button>
     <div class="modal-body">
-      <div class="modal-tags" id="modalTags"></div>
-      <h2 class="modal-name" id="modalName"></h2>
-      <p class="modal-loc"  id="modalLoc"></p>
-      <p class="modal-desc" id="modalDesc"></p>
-      <hr class="modal-divider" />
-      <p class="modal-section-title">Things to do</p>
-      <ul class="activities-list" id="modalActivities"></ul>
-      <div class="modal-meta" id="modalMeta"></div>
+      <div class="modal-tags"   id="modalTags"></div>
+      <h2  class="modal-name"   id="modalName"></h2>
+      <p   class="modal-loc"    id="modalLoc"></p>
+      <div id="modalFlightRow"></div>
+      <p   class="modal-desc"   id="modalDesc"></p>
+      <hr  class="modal-divider"/>
+      <p   class="modal-section-title">Things to do</p>
+      <ul  class="activities-list" id="modalActivities"></ul>
+      <div class="modal-meta"   id="modalMeta"></div>
     </div>
   </div>
 </div>
 
 <script>
-/* ── TRANSPARENT 1×1 GIF used as broken-image replacement ── */
 const BLANK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
-/* ── DATA ── */
-const spots = [
-  /* BEACH */
-  {
-    name:"Maldives", location:"Indian Ocean", tags:["beach"],
-    desc:"An archipelago of 1,192 coral islands spread across 90,000 km² of the Indian Ocean. Nearly 80% of the land sits less than one metre above sea level, making it Earth's lowest-lying nation. The lagoons here host over 2,000 species of fish and the overwater bungalow concept was essentially invented here in 1967.",
-    image:"https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800&q=80",
-    rating:4.9, price:3, bestTime:"Nov – Apr",
-    activities:["Snorkel or dive the house reef directly from your villa","Take a sunrise dolphin-watching cruise","Go island-hopping to uninhabited sandbanks","Try a guided submarine tour of the coral wall","Book a sunset fishing trip with local fishermen","Treat yourself to an overwater spa treatment","Kayak through a bioluminescent lagoon at night"]
-  },
-  {
-    name:"Bali", location:"Indonesia", tags:["beach","cultural"],
-    desc:"Unlike most of Indonesia, Bali is overwhelmingly Hindu — home to an estimated 20,000 temples and a rich tradition of dance, music, and art recognised by UNESCO as Intangible Cultural Heritage. The island packs in towering volcanoes, terraced rice paddies, and beginner-friendly surf breaks across just 5,780 km².",
-    image:"https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80",
-    rating:4.7, price:1, bestTime:"Apr – Oct",
-    activities:["Watch the sea temple of Tanah Lot at sunset","Hike the Tegallalang rice terrace trail at dawn","Surf the beginner-friendly breaks at Kuta Beach","Take a traditional Balinese cooking class","White-water raft the Ayung River through jungle gorges","Visit the Sacred Monkey Forest in Ubud","Catch an evening Kecak fire-dance performance"]
-  },
-  {
-    name:"Santorini", location:"Greece", tags:["beach","cultural"],
-    desc:"Santorini is the rim of a massive volcanic caldera formed after one of history's largest eruptions around 1,600 BC — an event some scholars link to the legend of Atlantis. The island's iconic white architecture is a Cycladic building code designed to reflect sunlight, and Oia is consistently ranked among the world's most photographed locations.",
-    image:"https://images.unsplash.com/photo-1533105079780-92b9be482077?w=800&q=80",
-    rating:4.8, price:3, bestTime:"May – Oct",
-    activities:["Watch the famous caldera sunset from Oia village","Tour a local winery — Santorini's Assyrtiko wine is world-class","Take a boat trip to the active Nea Kameni volcano","Explore the 3,600-year-old ruins of Akrotiri","Go cliff diving at Amoudi Bay","Sea-kayak around the caldera cliffs","ATV around the island's back roads to hidden beaches"]
-  },
-  {
-    name:"Cancún", location:"Quintana Roo, Mexico", tags:["beach","cultural"],
-    desc:"Before 1970, Cancún was a tiny fishing village of 100 people on a barrier island. Today it draws over 6 million visitors a year to its 14-mile Hotel Zone, where the Caribbean Sea meets warm, current-free waters averaging 28 °C. It sits within easy reach of Chichén Itzá — one of the New Seven Wonders of the World.",
-    image:"https://images.unsplash.com/photo-1510097467424-192d713fd8b2?w=800&q=80",
-    rating:4.5, price:2, bestTime:"Dec – Apr",
-    activities:["Day trip to Chichén Itzá and climb El Castillo pyramid","Swim in a cenote (underground freshwater sinkhole)","Snorkel the coral reefs around Isla Mujeres","Visit the Tulum clifftop Mayan ruins overlooking the sea","Swim with whale sharks (seasonal, May–Sep)","Explore Xcaret eco-theme park's underground rivers","Zip-line through jungle above the Caribbean"]
-  },
-  {
-    name:"Phuket", location:"Thailand", tags:["beach","adventure"],
-    desc:"Thailand's largest island at 576 km², Phuket was once wealthy from tin mining and rubber — hence the stately Sino-Portuguese mansions lining Phuket Old Town's streets. Offshore, Phang Nga Bay's limestone karst towers — made famous by James Bond — rise dramatically from emerald water.",
-    image:"https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?w=800&q=80",
-    rating:4.6, price:1, bestTime:"Nov – Apr",
-    activities:["Boat trip to the Phi Phi Islands for snorkeling","Kayak through the sea caves of Phang Nga Bay","Visit the Big Buddha hilltop statue","Explore the historic Sino-Portuguese streets of Old Town","Spend a morning at an ethical elephant sanctuary","Watch a live Muay Thai fight at a local stadium","Take a Thai cooking class on the beach"]
-  },
-  {
-    name:"Maui", location:"Hawaii, USA", tags:["beach","adventure"],
-    desc:"Known as the 'Valley Isle,' Maui is home to Haleakalā, a dormant shield volcano rising 3,055 m — high enough to watch a sunrise above the clouds. The 64-km Road to Hana winds through 59 bridges and rainforest waterfalls. Maui's west coast waters are a primary winter habitat for North Pacific humpback whales.",
-    image:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80",
-    rating:4.8, price:3, bestTime:"Apr – May, Sep – Nov",
-    activities:["Drive the Road to Hana and swim at Twin Falls","Wake before sunrise and hike Haleakalā volcano crater","Whale watch from a catamaran (Dec–Mar)","Snorkel the Molokini Crater marine sanctuary","Zipline over the rainforest canopy above Kaanapali","Visit the historic whaling town of Lahaina","Attend a traditional Hawaiian luau on the beach"]
-  },
-  {
-    name:"Fiji", location:"South Pacific Ocean", tags:["beach","adventure"],
-    desc:"An archipelago of 333 islands, Fiji is consistently rated among the world's top five dive destinations. The Somosomo Strait — nicknamed the 'Soft Coral Capital of the World' — contains coral diversity rivalling the Great Barrier Reef. On land, the interior highlands hold ancient rainforests and the Sabeto hot springs.",
-    image:"https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=800&q=80",
-    rating:4.8, price:2, bestTime:"Jul – Sep",
-    activities:["Dive the Somosomo Strait's rainbow-hued soft corals","Participate in a kava ceremony with a local village","Kayak through mangrove channels on Viti Levu","Zip-line across the Sabeto mountain range","Snorkel with manta rays at Manta Ray Bay","Stay one night in a traditional Fijian bure (house)","Hike through the Bouma National Heritage Park"]
-  },
-  {
-    name:"Amalfi Coast", location:"Campania, Italy", tags:["beach","cultural"],
-    desc:"A UNESCO World Heritage Site since 1997, the Amalfi Coast stretches 50 km along southern Italian shoreline where cliffs plunge straight into the Tyrrhenian Sea. Thirteen historic towns cling to the rock faces. The town of Amalfi was once a major maritime republic that helped establish the world's first maritime laws in the 11th century.",
-    image:"https://images.unsplash.com/photo-1534445538923-ab38e8740c4d?w=800&q=80",
-    rating:4.8, price:3, bestTime:"May – Oct",
-    activities:["Drive (or hire a driver for) the coastal road between Amalfi and Positano","Hike the Path of the Gods from Agerola to Positano","Take a private boat to swim in sea caves","Tour a lemon grove and take a limoncello-making class","Visit Ravello's Villa Rufolo gardens and their views","Explore the medieval Amalfi Cathedral and its cloister","Day trip by ferry to the island of Capri"]
-  },
-  {
-    name:"Seychelles", location:"Indian Ocean, East Africa", tags:["beach"],
-    desc:"The Seychelles' 115 islands are the world's only mid-ocean granitic archipelago — the giant rounded boulders on Anse Source d'Argent beach are hundreds of millions of years old. Over 50% of land is protected reserve, and the islands shelter the Coco de Mer palm which produces the world's largest seed (up to 25 kg).",
-    image:"https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800&q=80",
-    rating:4.9, price:3, bestTime:"Apr – May, Oct – Nov",
-    activities:["Snorkel at Anse Source d'Argent — one of Earth's most beautiful beaches","Visit the giant Aldabra tortoises at the Nature Reserve","Island-hop between Mahé, Praslin, and La Digue by ferry","Hike the Vallée de Mai UNESCO palm forest","Take a glass-bottom boat to see corals without getting wet","Try a Creole seafood cooking class","Kayak around the granitic coves at sunset"]
-  },
-  {
-    name:"Dubrovnik", location:"Croatia", tags:["beach","cultural"],
-    desc:"Known as the 'Pearl of the Adriatic,' Dubrovnik's medieval walled old city has been a UNESCO World Heritage Site since 1979. The limestone city walls — some over 25 metres tall — have survived nearly intact since the 14th century. The city also served as King's Landing in Game of Thrones.",
-    image:"https://images.unsplash.com/photo-1587974928442-77dc3e0dba72?w=800&q=80",
-    rating:4.7, price:2, bestTime:"May – Sep",
-    activities:["Walk the full 2-km circuit of the ancient city walls","Take the cable car to Mount Srđ for panoramic views","Sea kayak around the old town's sea walls","Day trip by boat to Lokrum Island's peacock-filled nature reserve","Spot Game of Thrones filming locations on a guided tour","Taste fresh oysters in the village of Ston","Take an evening sunset cruise along the Dalmatian coast"]
-  },
-
-  /* MOUNTAIN */
-  {
-    name:"Banff", location:"Alberta, Canada", tags:["mountain","adventure"],
-    desc:"Canada's first national park, established in 1885, Banff protects 6,641 km² of the Canadian Rockies. Lake Louise gets its turquoise colour from glacial rock flour suspended in the water. The park contains over 1,000 km of hiking trails and shelters wildlife including grizzly bears, wolves, and mountain caribou.",
-    image:"https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80",
-    rating:4.9, price:2, bestTime:"Jun – Sep",
-    activities:["Canoe on the impossibly turquoise Lake Louise","Drive the Icefields Parkway — one of Earth's great scenic roads","Ski or snowboard at Sunshine Village or Lake Louise resort","Hike to the Plain of Six Glaciers teahouse","Spot wildlife (elk, bears) on a guided safari","Take the Banff Gondola to Sulphur Mountain summit","Soak in the historic Banff Upper Hot Springs"]
-  },
-  {
-    name:"Swiss Alps", location:"Switzerland", tags:["mountain","adventure"],
-    desc:"The Swiss Alps cover 65% of the country and include the Matterhorn (4,478 m), whose pyramid shape was formed by four glaciers eroding it from all sides. The Aletsch Glacier — the largest in the Alps at 23 km long — is a UNESCO World Heritage Site. Switzerland has 7,700+ km of marked hiking trails.",
-    image:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
-    rating:4.9, price:3, bestTime:"Dec – Mar, Jun – Sep",
-    activities:["Ride the Glacier Express scenic train from Zermatt to St. Moritz","Ski or snowboard world-class slopes in Verbier or Zermatt","Hike to a Matterhorn viewpoint above Zermatt","Visit Jungfraujoch — the 'Top of Europe' at 3,454 m","Paraglide from Interlaken over turquoise Lake Thun","Take a cheese and chocolate fondue tasting tour","Cruise across Lake Geneva between Montreux and Lausanne"]
-  },
-  {
-    name:"Patagonia", location:"Chile & Argentina", tags:["mountain","adventure"],
-    desc:"Shared between Chile and Argentina, Patagonia encompasses the southern tip of South America and some of the least-touched wilderness on Earth. Torres del Paine National Park was voted the world's eighth wonder by National Geographic. The Southern Patagonian Ice Field is the third-largest freshwater reserve in the world.",
-    image:"https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=80",
-    rating:4.8, price:2, bestTime:"Nov – Mar",
-    activities:["Trek the famous W Circuit through Torres del Paine (5 days)","Walk on the Perito Moreno Glacier with crampons","Take a Zodiac cruise through the Grey Glacier icebergs","Horseback ride across the open Pampas with a gaucho","Watch Andean condors soar above the valley","Fly-fish the crystal rivers for giant brown trout","Camp under the southern hemisphere's most star-filled skies"]
-  },
-  {
-    name:"Dolomites", location:"Italy", tags:["mountain","cultural"],
-    desc:"Declared a UNESCO World Heritage Site in 2009, the Dolomites contain 18 peaks above 3,000 m. The distinctive pale rock turns rose-gold at sunset in a phenomenon locals call enrosadira. The region straddles Italian and Austrian-German culture (South Tyrol), so meals are as likely to feature schnitzel as risotto.",
-    image:"https://images.unsplash.com/photo-1520121401995-928cd50d4e27?w=800&q=80",
-    rating:4.8, price:2, bestTime:"Jul – Sep, Dec – Mar",
-    activities:["Hike the Alta Via 1 long-distance trail across the range","Climb a Via Ferrata — iron-rung routes through vertical cliffs","Ski the legendary Sella Ronda circuit (40 km, 4 valleys)","Walk to Lago di Braies, the most beautiful lake in the Alps","Cycle the Great Dolomites Road on an e-bike","Picnic on the Alpe di Siusi — Europe's largest alpine plateau","Try a South Tyrolean wine and speck (cured ham) tasting"]
-  },
-  {
-    name:"Nepal Himalayas", location:"Nepal", tags:["mountain","cultural","adventure"],
-    desc:"Nepal contains eight of the world's 14 peaks above 8,000 m, including Everest (8,849 m). The classic Everest Base Camp trek covers 130 km round-trip and passes through the Khumbu region, home to the Sherpa people. Kathmandu's Durbar Square and the birthplace of Buddha at Lumbini are both UNESCO World Heritage Sites.",
-    image:"https://images.unsplash.com/photo-1585016495481-91613db79698?w=800&q=80",
-    rating:4.9, price:1, bestTime:"Mar – May, Sep – Nov",
-    activities:["Trek to Everest Base Camp (14-day guided trek)","Paraglide from Sarangkot over the Pokhara valley","White-water raft the wild Trishuli River gorge","Visit the giant Boudhanath Stupa in Kathmandu","Watch sunrise on the Himalayas from Nagarkot hilltop","Jungle safari in Chitwan National Park for rhinos and tigers","Explore the ancient temples of Bhaktapur Durbar Square"]
-  },
-  {
-    name:"Scottish Highlands", location:"Scotland, UK", tags:["mountain","adventure"],
-    desc:"The Highlands cover more than half of Scotland but are home to less than 2% of its population — one of the lowest densities in Europe. Ben Nevis (1,345 m) is the tallest peak in the British Isles. Loch Ness is 37 km long and deep enough to contain the entire population of Earth three times over in water volume.",
-    image:"https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&q=80",
-    rating:4.6, price:2, bestTime:"May – Sep",
-    activities:["Hike to the summit of Ben Nevis — Britain's highest peak","Search for Nessie on a Loch Ness boat tour","Drive the dramatic Glen Coe valley (scene of an 1692 massacre)","Take the ferry to the Isle of Skye and hike the Quiraing","Tour a single-malt whisky distillery (Glenfiddich or Talisker)","Spot dolphins and seals on the Moray Firth","Visit Eilean Donan Castle — Scotland's most photographed castle"]
-  },
-  {
-    name:"Norwegian Fjords", location:"Norway", tags:["mountain","adventure"],
-    desc:"The Norwegian fjords were carved by glaciers over 2.5 million years during the Ice Age, creating cliffs that plunge up to 1,300 m into seawater. Geirangerfjord and Nærøyfjord are UNESCO World Heritage Sites. The Flåm Railway descends 863 m in 20 km and is frequently rated one of the world's most scenic rail journeys.",
-    image:"https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80",
-    rating:4.8, price:3, bestTime:"May – Sep",
-    activities:["Cruise through Geirangerfjord past the Seven Sisters waterfall","Ride the dramatic Flåm Railway from mountain to fjord","Kayak on the narrow Nærøyfjord — a UNESCO wonder","Hike to the Stegastein viewpoint for a 650 m cliff-edge view","Chase the Northern Lights from a glass-roofed cabin (winter)","Drive the iconic Atlantic Ocean Road suspended over the sea","Explore the colourful wooden wharf (Bryggen) in Bergen"]
-  },
-  {
-    name:"Azores", location:"Portugal (North Atlantic)", tags:["mountain","adventure"],
-    desc:"Nine volcanic islands rising from the Mid-Atlantic Ridge, roughly equidistant between Europe and North America. São Miguel's Sete Cidades caldera contains two lakes — one blue, one green — separated by a narrow bridge. Locals cook a traditional stew underground in volcanic soil. Blue and sperm whales pass through year-round.",
-    image:"https://images.unsplash.com/photo-1548574505-5e239809ee19?w=800&q=80",
-    rating:4.7, price:2, bestTime:"Apr – Oct",
-    activities:["Whale watching — one of the world's best year-round locations","Soak in the Furnas geothermal thermal baths","Hike the rim of Sete Cidades twin-lake caldera","Taste cozido — a stew cooked naturally underground by volcanic heat","Canyon through waterfalls in Ribeira dos Caldeirões park","Dive the crystal-clear waters around Faial island","Visit Terceira island's UNESCO-listed Angra do Heroísmo town"]
-  },
-
-  /* CITY */
-  {
-    name:"Tokyo", location:"Japan", tags:["city","cultural"],
-    desc:"The Greater Tokyo Area, with 37.4 million people, is the world's most populous metropolitan area. Tokyo holds more Michelin stars than any other city on Earth — over 200 starred restaurants as of 2024. The city was almost entirely rebuilt after the 1923 Great Kanto Earthquake and the 1945 firebombings.",
-    image:"https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80",
-    rating:4.9, price:2, bestTime:"Mar – May, Sep – Nov",
-    activities:["Stand at the world's busiest pedestrian crossing — Shibuya Crossing","Visit teamLab Planets digital art museum","Eat fresh sushi at the outer stalls of Tsukiji Market at 7 am","Explore Senso-ji Temple at dawn before crowds arrive","Day trip to Mount Fuji and Lake Kawaguchi","Watch a sumo morning practice session (free entry, early)","Wander Akihabara electronics and anime district at night"]
-  },
-  {
-    name:"Paris", location:"France", tags:["city","cultural"],
-    desc:"Paris receives around 50 million tourists per year, making it the world's most visited city for decades. The Louvre holds 480,000 objects across 72,735 m² of floor space — walking every gallery covers roughly 15 km. The Eiffel Tower, built as a temporary exhibit for the 1889 World's Fair, was saved from demolition because it served as a radio antenna.",
-    image:"https://images.unsplash.com/photo-1502602915736-0940c15cae27?w=800&q=80",
-    rating:4.7, price:3, bestTime:"Apr – Jun, Sep – Oct",
-    activities:["See the Eiffel Tower sparkle at 10 pm — it lights up every hour","Spend a morning in the Louvre (arrive before 9 am)","Take a Seine River dinner cruise at sunset","Climb Montmartre to Sacré-Cœur for views over all of Paris","Day trip to the Palace of Versailles and its gardens","Take a croissant and pastry-making class with a French chef","Tour the eerie Paris Catacombs — 6 million skeletons beneath the city"]
-  },
-  {
-    name:"Barcelona", location:"Spain", tags:["city","cultural","beach"],
-    desc:"Barcelona is the capital of Catalonia, a region with its own language (Catalan) and distinct culture. The Sagrada Família has been under construction since 1882 — architect Antoni Gaudí is buried in its crypt — and is expected to complete around 2026. Barcelona has seven UNESCO-listed modernist buildings by Gaudí alone.",
-    image:"https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=800&q=80",
-    rating:4.7, price:2, bestTime:"May – Jun, Sep – Oct",
-    activities:["Tour the soaring interior of the Sagrada Família at opening time","Explore Park Güell's mosaic terraces and city views","Browse La Boqueria market for jamón, cheese, and fresh juice","Spend an afternoon on Barceloneta beach","Walk the Gothic Quarter's medieval lanes at night","Take a stadium tour at Camp Nou — the largest in Europe","Day trip by train to the Montserrat mountain monastery"]
-  },
-  {
-    name:"New York City", location:"USA", tags:["city"],
-    desc:"Home to 8.3 million people who speak over 800 languages — the most linguistically diverse city in history. The NYC subway runs 24/7 across 245 stations. Central Park receives 42 million visitors per year — more than Yellowstone, Yosemite, and the Grand Canyon combined.",
-    image:"https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800&q=80",
-    rating:4.6, price:3, bestTime:"Apr – Jun, Sep – Nov",
-    activities:["Walk the Brooklyn Bridge at sunrise for skyline photos","See a Broadway show (book TKTS discount tickets same-day)","Take the FREE Staten Island Ferry past the Statue of Liberty","Walk the High Line elevated park above the Meatpacking District","Visit the Metropolitan Museum of Art for an entire day","Explore a different NYC neighbourhood's food scene each evening","Take the 7 train to Queens for the world's best food tour"]
-  },
-  {
-    name:"London", location:"England, UK", tags:["city","cultural"],
-    desc:"Founded as 'Londinium' by the Romans in 43 AD, London was the first city to hit a population of one million (around 1800). The British Museum receives 6 million visitors yearly and holds over 8 million objects collected over 250 years. More than 300 languages are spoken in London's schools.",
-    image:"https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800&q=80",
-    rating:4.6, price:3, bestTime:"May – Sep",
-    activities:["Tour the Tower of London and see the Crown Jewels","Spend a day in the free British Museum","Browse Borough Market for world-class street food","See a West End show in the Theatre District","Watch the Changing of the Guard at Buckingham Palace","Wander Notting Hill and browse Portobello Road Market (Saturdays)","Day trip by train to Stonehenge and Bath's Roman Baths"]
-  },
-  {
-    name:"Singapore", location:"Southeast Asia", tags:["city","cultural"],
-    desc:"A city-state of just 733 km², Singapore transformed from a colonial trading post to one of the world's wealthiest nations in a single generation. Gardens by the Bay's Supertrees (25–50 m tall) collect solar energy and harvest rainwater. Changi Airport has won 'World's Best Airport' twelve consecutive times.",
-    image:"https://images.unsplash.com/photo-1508964942454-1a56651d54ac?w=800&q=80",
-    rating:4.7, price:3, bestTime:"Feb – Apr",
-    activities:["Watch the nightly light show at Gardens by the Bay (free)","Eat your way around a hawker centre — try chicken rice and laksa","Visit the rooftop infinity pool at Marina Bay Sands SkyPark","Explore three distinct cultures: Little India, Chinatown, Arab Street","See Orangutans and slow lorises at Singapore Night Zoo","Ride the cable car to Sentosa Island for beaches and Universal Studios","Shop the Orchard Road luxury strip and the Haji Lane boutiques"]
-  },
-  {
-    name:"Istanbul", location:"Turkey", tags:["city","cultural"],
-    desc:"The only city in the world that spans two continents (Europe and Asia), divided by the Bosphorus strait. Istanbul has been the capital of three of history's greatest empires: Roman, Byzantine, and Ottoman. The Hagia Sophia, built in 537 AD, held the record for the world's largest dome for nearly 1,000 years.",
-    image:"https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=800&q=80",
-    rating:4.8, price:2, bestTime:"Apr – May, Sep – Nov",
-    activities:["Visit the Hagia Sophia at opening time before crowds arrive","Explore the labyrinthine Grand Bazaar (4,400 shops)","Take a Bosphorus cruise between Europe and Asia","Tour Topkapi Palace and the Ottoman Harem","Relax in a traditional Turkish hammam (bath house)","Browse the Spice Bazaar and sample Turkish delight","Watch the sunset from the Galata Tower rooftop"]
-  },
-  {
-    name:"Amsterdam", location:"Netherlands", tags:["city","cultural"],
-    desc:"Amsterdam has more canals than Venice and more bridges than Paris — 165 canals and 1,539 bridges. About 60% of the city lies below sea level, protected by dikes and pumping stations. There are more bicycles than people (900,000 bikes vs. 830,000 residents). The Anne Frank House receives over 1 million visitors per year.",
-    image:"https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?w=800&q=80",
-    rating:4.6, price:2, bestTime:"Apr – May, Sep – Oct",
-    activities:["Visit the Anne Frank House (book online months in advance)","Tour the Van Gogh Museum's stunning collection","Take a 1-hour canal boat tour through the historic ring","Rent a bike and cycle through Vondelpark like a local","Day trip to Keukenhof's 7 million blooming tulips (spring only)","Visit the Rijksmuseum for Rembrandt and Vermeer masterpieces","Day trip to the Zaanse Schans windmill village"]
-  },
-  {
-    name:"Prague", location:"Czech Republic", tags:["city","cultural"],
-    desc:"Prague Castle, founded in the 9th century, is the world's largest ancient castle complex — covering 70,000 m². The medieval core escaped major WWII damage, leaving centuries of Gothic, Baroque, and Art Nouveau architecture intact. The Astronomical Clock (Orloj), installed in 1410, is the oldest still operating in its original location.",
-    image:"https://images.unsplash.com/photo-1541849546-216549ae216d?w=800&q=80",
-    rating:4.7, price:1, bestTime:"May – Sep",
-    activities:["Cross Charles Bridge at 6 am — before the crowds","Explore Prague Castle and St. Vitus Cathedral","Watch the Astronomical Clock strike the hour in Old Town Square","Sample Czech pilsner in a traditional beer hall (U Fleků, since 1499)","Take a ghost tour of the Jewish Quarter","Boat cruise on the Vltava River at sunset","Day trip to the UNESCO fairy-tale town of Český Krumlov"]
-  },
-  {
-    name:"Dubai", location:"UAE", tags:["city","adventure"],
-    desc:"As recently as 1960, Dubai had a population of fewer than 50,000 people and virtually no infrastructure. Today it's home to the Burj Khalifa (828 m), the world's tallest building. Dubai Mall is the world's largest shopping centre by total area. The city receives over 16 million international visitors per year.",
-    image:"https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80",
-    rating:4.6, price:3, bestTime:"Nov – Mar",
-    activities:["Ride the elevator to the Burj Khalifa observation deck (148th floor)","Go dune bashing and camel riding on a desert safari","Ski indoors at Ski Dubai inside the Mall of the Emirates","Browse the Gold Souk and Spice Souk in Deira","Walk across the Dubai Frame with its glass-floor bridge","Take a wooden dhow dinner cruise past the illuminated skyline","Day trip to the restored Al Fahidi historical neighbourhood"]
-  },
-
-  /* ADVENTURE */
-  {
-    name:"New Zealand", location:"Oceania", tags:["adventure","mountain"],
-    desc:"Queenstown is widely called the 'Adventure Capital of the World' — AJ Hackett launched the world's first commercial bungee jump here in 1988 off the Kawarau Bridge. New Zealand's Fiordland National Park is a UNESCO World Heritage Site where Milford Sound receives up to 8 metres of rain per year.",
-    image:"https://images.unsplash.com/photo-1507699622108-4be3abd695ad?w=800&q=80",
-    rating:4.9, price:2, bestTime:"Dec – Feb",
-    activities:["Bungee jump off the original Kawarau Bridge in Queenstown","Cruise Milford Sound past Mitre Peak and waterfalls","Hike the Tongariro Alpine Crossing — NZ's greatest day walk","Visit the Hobbiton movie set in Matamata","Sea-kayak Abel Tasman National Park's golden-beach coastline","Skydive over Lake Wanaka from 15,000 feet","White-water raft the Grade 5 Kaituna River near Rotorua"]
-  },
-  {
-    name:"Costa Rica", location:"Central America", tags:["adventure","beach"],
-    desc:"Despite covering only 0.03% of Earth's surface, Costa Rica contains roughly 5% of the world's biodiversity — 500,000 species, 900 species of birds, and 35,000 insect species. The country abolished its military in 1948 and redirected the budget to education and nature. Nearly 99% of electricity comes from renewable sources.",
-    image:"https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=800&q=80",
-    rating:4.7, price:1, bestTime:"Dec – Apr",
-    activities:["Zip-line through the Monteverde cloud forest canopy","Hike the trails of Manuel Antonio National Park for sloths","White-water raft the Class IV-V Pacuare River","Watch nesting sea turtles on the Caribbean coast (Jul–Oct)","Soak in the Tabacón hot springs below Arenal Volcano","Visit a sloth sanctuary and a butterfly garden","Surf the Pacific waves at Tamarindo or Nosara"]
-  },
-  {
-    name:"Iceland", location:"North Atlantic", tags:["adventure"],
-    desc:"Iceland sits atop the Mid-Atlantic Ridge where two tectonic plates pull apart at 2.5 cm per year. This gives the island 130 volcanic systems, 10,000+ waterfalls, 269 glaciers covering 11% of the land, and geothermal energy that heats 87% of all homes for free. Northern Lights are visible September–March.",
-    image:"https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=800&q=80",
-    rating:4.8, price:3, bestTime:"Jun – Aug, Dec – Feb",
-    activities:["Chase the Northern Lights on a guided night tour (Sep–Mar)","Do the Golden Circle: Geysir, Gullfoss waterfall, Þingvellir","Soak in the famous Blue Lagoon geothermal spa","Hike on the Vatnajökull glacier with crampons and a guide","Snorkel the crystal-clear Silfra fissure between two continents","Whale watch from Húsavík — Europe's whale watching capital","Watch puffins nest on sea cliffs near Vík (May–Aug)"]
-  },
-  {
-    name:"Serengeti & Masai Mara", location:"Tanzania & Kenya", tags:["adventure","cultural"],
-    desc:"The Serengeti-Mara ecosystem hosts the Great Migration — 1.5 million wildebeest, 400,000 zebras, and 200,000 gazelles moving 800 km in a circular annual route. The Serengeti National Park, established in 1951, protects 14,763 km² and contains the largest lion population in Africa.",
-    image:"https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80",
-    rating:4.9, price:3, bestTime:"Jul – Oct",
-    activities:["Game drive at dawn to see lions hunt on the open plains","Hot air balloon over the Serengeti at sunrise — unforgettable","Visit an authentic Maasai village and learn about their traditions","Witness the Great Migration river crossing (Jul–Sep)","Night drive to spot leopards, hyenas, and aardvarks","Tour the Ngorongoro Crater — the world's largest intact caldera","Extend your trip to Zanzibar for beach and spice tours"]
-  },
-  {
-    name:"Galápagos Islands", location:"Ecuador (Pacific Ocean)", tags:["adventure"],
-    desc:"Charles Darwin's 1835 visit was instrumental in developing the theory of evolution by natural selection. The islands sit at the confluence of three major ocean currents, creating a unique ecosystem where sea lions swim with penguins and iguanas dive into the sea. 97% of the archipelago is designated national park.",
-    image:"https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=800&q=80",
-    rating:4.9, price:3, bestTime:"Jun – Dec",
-    activities:["Snorkel with playful sea lions on Española Island","See giant tortoises in their natural habitat on Santa Cruz","Hike Bartolomé Island for the iconic Pinnacle Rock view","Kayak around Kicker Rock with hammerhead sharks below","Watch blue-footed boobies perform their mating dance","Night snorkel with white-tip reef sharks and manta rays","Visit the Charles Darwin Research Station"]
-  },
-  {
-    name:"Amazon Rainforest", location:"Brazil & Peru", tags:["adventure","cultural"],
-    desc:"The Amazon Basin covers 7 million km² across nine countries and contains 40,000 plant species, 1,300 bird species, and an estimated 10% of all species on Earth. The Amazon River discharges 20% of all freshwater entering the world's oceans. Indigenous communities in the region speak over 300 distinct languages.",
-    image:"https://images.unsplash.com/photo-1534786432-17f23db37f15?w=800&q=80",
-    rating:4.7, price:2, bestTime:"Jun – Nov",
-    activities:["Stay in a jungle lodge and wake to howler monkeys","Fish for piranha in a blackwater river with a local guide","Spot pink river dolphins (boto) from a dugout canoe","Walk a canopy treetop walkway 30 m above the forest floor","Night boat tour with a spotlight to find caiman eyes glowing","Visit an indigenous community and learn traditional plant medicine","Search for anacondas in the flooded igapó forest"]
-  },
-
-  /* CULTURAL */
-  {
-    name:"Machu Picchu", location:"Peru", tags:["cultural","adventure"],
-    desc:"Built around 1450 AD by Inca emperor Pachacuti, Machu Picchu was abandoned less than a century later during the Spanish conquest and remained unknown to the outside world until Hiram Bingham III rediscovered it in 1911. The site's 200 dry-stone structures were assembled so precisely a knife blade cannot be inserted between the blocks.",
-    image:"https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800&q=80",
-    rating:4.9, price:2, bestTime:"May – Sep",
-    activities:["Arrive at the Sun Gate (Inti Punku) for the classic first view at sunrise","Hike the vertiginous Huayna Picchu peak for aerial views","Trek the 4-day Inca Trail for the most dramatic approach","Soak in the natural hot springs in Aguas Calientes town below","Tour the Sacred Valley and the Ollantaytambo fortress","Explore the colonial city of Cusco and its Inca stonework","Hike Rainbow Mountain (Vinicunca) — a striped geological wonder"]
-  },
-  {
-    name:"Kyoto", location:"Japan", tags:["cultural"],
-    desc:"Japan's imperial capital for over a thousand years (794–1868), Kyoto is home to 17 UNESCO World Heritage Sites including 1,600 Buddhist temples, 400 Shinto shrines, and three historic palace complexes. During cherry blossom season in late March, the city's 200,000+ cherry trees draw over 10 million visitors.",
-    image:"https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800&q=80",
-    rating:4.9, price:2, bestTime:"Mar – May, Oct – Nov",
-    activities:["Walk the 10,000 torii gate tunnel at Fushimi Inari shrine at dawn","Stroll through Arashiyama's magical bamboo grove","Try to spot geisha on the lantern-lit lanes of Gion district","Participate in a traditional tea ceremony in a tatami room","Walk the Philosopher's Path canal lined with cherry trees","Explore Nishiki Market — 'Kyoto's Kitchen' — for street food","Rent a kimono and cycle between temples in the Higashiyama district"]
-  },
-  {
-    name:"Marrakech", location:"Morocco", tags:["cultural"],
-    desc:"Founded in 1062 by the Almoravid dynasty, Marrakech has served as Morocco's capital four times across its history. The medina (old city) is a UNESCO World Heritage Site whose medieval street plan remains almost unchanged. Djemaa el-Fna square was designated a UNESCO Intangible Cultural Heritage in 2001 — the first public space to receive this honour.",
-    image:"https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=800&q=80",
-    rating:4.6, price:1, bestTime:"Mar – May, Sep – Nov",
-    activities:["Get lost in the medieval souk maze (hire a guide to find your way out)","Watch the Djemaa el-Fna square transform at dusk — musicians, storytellers, acrobats","Admire the intricate tilework of the Ben Youssef Madrasa","Visit Majorelle Garden, once owned by Yves Saint Laurent","Experience a traditional hammam and argan oil massage","Take a cooking class and learn to make a proper tagine","Day trip to the Sahara dunes at Merzouga for a camel ride and overnight camp"]
-  },
-  {
-    name:"Rome", location:"Italy", tags:["cultural"],
-    desc:"Rome has been continuously inhabited for over 2,800 years and contains more UNESCO World Heritage Sites within its city limits than any other city in the world. The Colosseum, completed in 80 AD, held up to 80,000 spectators. It is estimated that more than half of all surviving ancient marble artworks in existence are in Rome.",
-    image:"https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800&q=80",
-    rating:4.8, price:2, bestTime:"Apr – Jun, Sep – Oct",
-    activities:["Tour the Colosseum, Roman Forum, and Palatine Hill (book ahead)","Visit the Vatican Museums and Sistine Chapel early morning","Toss a coin in the Trevi Fountain at dawn before crowds arrive","Wander Campo de' Fiori market and eat supplì (fried rice balls)","See Caravaggio's paintings in the Borghese Gallery","Take a food tour through Trastevere neighbourhood at night","Day trip to Pompeii — the city frozen in time by Vesuvius in 79 AD"]
-  },
-  {
-    name:"Athens", location:"Greece", tags:["cultural"],
-    desc:"Athens has a recorded history spanning 3,400 years and the Acropolis hill has been continuously inhabited since the 4th millennium BC. The Parthenon was built between 447 and 432 BC. Athens is widely considered the birthplace of democracy, philosophy, the Olympic Games, and Western theatre.",
-    image:"https://images.unsplash.com/photo-1603565816030-6b389eeb23cb?w=800&q=80",
-    rating:4.7, price:2, bestTime:"Apr – Jun, Sep – Oct",
-    activities:["Climb the Acropolis at opening time for empty photographs","Spend hours in the National Archaeological Museum","Wander the Plaka neighbourhood's neoclassical streets","Day trip to Cape Sounion to watch the sunset over the Temple of Poseidon","Eat fresh seafood at a taverna in Piraeus harbour","Take an Athens street-food tour through the central market","Day trip to the ancient sanctuary of Delphi — the 'navel of the world'"]
-  },
-  {
-    name:"Petra", location:"Jordan", tags:["cultural","adventure"],
-    desc:"Petra was the capital of the Nabataean Kingdom from around 400 BC, with a population that once reached 30,000. Carved entirely into rose-red sandstone cliffs, the Treasury (Al-Khazneh) stands 43 m tall and was likely a royal tomb. Swiss explorer Johann Ludwig Burckhardt rediscovered it in 1812 by disguising himself as an Arab pilgrim.",
-    image:"https://images.unsplash.com/photo-1579606032821-4e6161c81bd3?w=800&q=80",
-    rating:4.9, price:2, bestTime:"Mar – May, Sep – Nov",
-    activities:["Walk the 1.2-km Siq canyon and emerge before the Treasury at sunrise","Hike 800 steps to the Monastery (Ad Deir) — even more impressive than the Treasury","Take the 'Petra by Night' candlelit tour on Monday, Wednesday, and Thursday","Scramble up the High Place of Sacrifice for panoramic canyon views","Day trip to Wadi Rum desert for a jeep safari among red sandstone arches","Eat mansaf (Jordan's national dish) at a local restaurant in Wadi Musa","Visit the Royal Tombs carved into the cliff face above the main city"]
-  },
-  {
-    name:"Angkor Wat", location:"Cambodia", tags:["cultural"],
-    desc:"Built during the Khmer Empire in the early 12th century, Angkor Wat is the world's largest religious monument — covering 162 hectares. The temple complex represents Mount Meru (home of the gods in Hindu cosmology) and is aligned so precisely that sunrise on the spring equinox falls perfectly over the central tower.",
-    image:"https://images.unsplash.com/photo-1599658880436-c61792e70672?w=800&q=80",
-    rating:4.8, price:1, bestTime:"Nov – Feb",
-    activities:["Watch the reflection of sunrise over Angkor Wat in the moat","Explore Ta Prohm — the jungle temple where tree roots consume the walls","See the 216 massive stone faces of the Bayon temple","Hire a bicycle and cycle independently between the temple complexes","Visit the Tonlé Sap lake floating villages for a unique perspective","Watch a traditional Apsara dance performance in the evening","Take a cooking class in Siem Reap to learn Khmer cuisine"]
-  },
-  {
-    name:"Havana", location:"Cuba", tags:["cultural","city"],
-    desc:"Founded by the Spanish in 1519, Havana's Old City (Habana Vieja) is a UNESCO World Heritage Site. Cuba's relative isolation since the 1960s US embargo created a living time capsule: pre-revolution American cars — kept running for 60+ years through improvised engineering — are still daily drivers throughout the city.",
-    image:"https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=800&q=80",
-    rating:4.5, price:1, bestTime:"Dec – Apr",
-    activities:["Hire a classic 1950s American convertible for a tour of the city","Watch salsa dancing erupt spontaneously in the streets at night","Tour a cigar factory and learn how Cohibas are hand-rolled","Visit Hemingway's favourite bar, La Bodeguita del Medio, for a mojito","Explore the colourful mosaic neighbourhood of Fusterlandia","Watch the nightly Cañonazo — a cannon-firing ceremony at Morro Castle","Stroll the Malecón seafront at sunset with local families"]
-  },
-  {
-    name:"Cairo & Giza", location:"Egypt", tags:["cultural"],
-    desc:"The Great Pyramid of Giza, built around 2560 BC, is the only surviving structure of the original Seven Wonders of the Ancient World. For 3,800 years it held the record as the tallest man-made structure on Earth. The Cairo Egyptian Museum holds over 120,000 ancient artefacts, including the intact tomb treasures of Tutankhamun.",
-    image:"https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800&q=80",
-    rating:4.7, price:1, bestTime:"Oct – Apr",
-    activities:["Enter the interior of the Great Pyramid of Khufu (claustrophobic but extraordinary)","Visit the Egyptian Museum and see Tutankhamun's golden death mask","Watch the Sound and Light Show at the Pyramids after dark","Cruise the Nile at sunset on a traditional felucca sailboat","Explore Islamic Cairo and the Al-Azhar Mosque","Browse the labyrinthine Khan el-Khalili bazaar for spices and souvenirs","Day trip to Luxor for the Valley of the Kings (Tutankhamun's actual tomb is here)"]
-  }
+/* ── CITIES ── */
+const CITIES = [
+  {id:"NYC",name:"New York",    emoji:"🗽"},
+  {id:"LAX",name:"Los Angeles", emoji:"🌴"},
+  {id:"CHI",name:"Chicago",     emoji:"🌆"},
+  {id:"MIA",name:"Miami",       emoji:"🌊"},
+  {id:"DAL",name:"Dallas",      emoji:"⭐"},
+  {id:"SEA",name:"Seattle",     emoji:"🌲"},
+  {id:"LON",name:"London",      emoji:"🎡"},
+  {id:"TOR",name:"Toronto",     emoji:"🍁"},
 ];
 
-/* ── CONSTANTS ── */
-const CARDS_PER_PAGE = 9;
-const priceMap   = {1:"$ Budget", 2:"$$ Mid-range", 3:"$$$ Luxury"};
-const priceClass = {1:"p1", 2:"p2", 3:"p3"};
+/* ── SPOTS (38 destinations) ──
+   flights: approximate total travel hours including connections */
+const spots = [
+  /* ── BEACH ── */
+  {name:"Maldives",location:"Indian Ocean",tags:["beach"],
+   desc:"An archipelago of 1,192 coral islands spread across 90,000 km² of the Indian Ocean. Nearly 80% of the land sits less than one metre above sea level, making it Earth's lowest-lying nation. The lagoons here host over 2,000 species of fish, and the overwater bungalow concept was essentially invented here in 1967.",
+   image:"https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800&q=80",
+   rating:4.9,price:3,bestTime:"Nov – Apr",
+   flights:{NYC:18,LAX:21,CHI:19,MIA:20,DAL:20,SEA:23,LON:10,TOR:20},
+   activities:["Snorkel or dive the house reef directly from your villa","Take a sunrise dolphin-watching cruise","Go island-hopping to uninhabited sandbanks","Try a guided submarine tour of the coral wall","Book a sunset fishing trip with local fishermen","Treat yourself to an overwater spa treatment","Kayak through a bioluminescent lagoon at night"]},
 
+  {name:"Bali",location:"Indonesia",tags:["beach","cultural"],
+   desc:"Unlike most of Indonesia, Bali is overwhelmingly Hindu — home to an estimated 20,000 temples and a rich tradition of dance, music, and art recognised by UNESCO as Intangible Cultural Heritage. The island packs in towering volcanoes, terraced rice paddies, and surf breaks across just 5,780 km².",
+   image:"https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80",
+   rating:4.7,price:1,bestTime:"Apr – Oct",
+   flights:{NYC:23,LAX:18,CHI:22,MIA:25,DAL:22,SEA:19,LON:16,TOR:22},
+   activities:["Watch the sea temple of Tanah Lot at sunset","Hike the Tegallalang rice terraces at dawn","Surf the beginner-friendly breaks at Kuta Beach","Take a traditional Balinese cooking class","White-water raft the Ayung River through jungle gorges","Visit the Sacred Monkey Forest in Ubud","Catch an evening Kecak fire-dance performance"]},
+
+  {name:"Santorini",location:"Greece",tags:["beach","cultural"],
+   desc:"Santorini is the rim of a massive volcanic caldera formed after one of history's largest eruptions around 1,600 BC — an event some scholars link to the legend of Atlantis. The island's iconic white architecture is a Cycladic building code designed to reflect sunlight, and Oia is consistently ranked among the world's most photographed locations.",
+   image:"https://images.unsplash.com/photo-1533105079780-92b9be482077?w=800&q=80",
+   rating:4.8,price:3,bestTime:"May – Oct",
+   flights:{NYC:11,LAX:15,CHI:12,MIA:12,DAL:13,SEA:15,LON:4,TOR:11},
+   activities:["Watch the caldera sunset from Oia village","Tour a local winery — Santorini's Assyrtiko wine is world-class","Take a boat trip to the active Nea Kameni volcano","Explore the 3,600-year-old ruins of Akrotiri","Go cliff diving at Amoudi Bay","Sea-kayak around the caldera cliffs","ATV around the island's back roads to hidden beaches"]},
+
+  {name:"Cancún",location:"Quintana Roo, Mexico",tags:["beach","cultural"],
+   desc:"Before 1970, Cancún was a tiny fishing village of 100 people. Today it draws over 6 million visitors a year to its 14-mile Hotel Zone, where the Caribbean Sea meets warm waters averaging 28 °C. It sits within easy reach of Chichén Itzá — one of the New Seven Wonders of the World.",
+   image:"https://images.unsplash.com/photo-1510097467424-192d713fd8b2?w=800&q=80",
+   rating:4.5,price:2,bestTime:"Dec – Apr",
+   flights:{NYC:4,LAX:5,CHI:4,MIA:2,DAL:3,SEA:6,LON:10,TOR:5},
+   activities:["Day trip to Chichén Itzá and climb El Castillo pyramid","Swim in a cenote (underground freshwater sinkhole)","Snorkel the coral reefs around Isla Mujeres","Visit the Tulum clifftop Mayan ruins","Swim with whale sharks (May–Sep, seasonal)","Explore Xcaret eco-park's underground rivers","Zip-line through jungle above the Caribbean"]},
+
+  {name:"Phuket",location:"Thailand",tags:["beach","adventure"],
+   desc:"Thailand's largest island at 576 km², Phuket was once wealthy from tin mining and rubber — hence the stately Sino-Portuguese mansions lining Phuket Old Town's streets. Offshore, Phang Nga Bay's limestone karst towers — made famous by James Bond — rise dramatically from emerald water.",
+   image:"https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?w=800&q=80",
+   rating:4.6,price:1,bestTime:"Nov – Apr",
+   flights:{NYC:22,LAX:20,CHI:22,MIA:23,DAL:21,SEA:20,LON:13,TOR:21},
+   activities:["Boat trip to the Phi Phi Islands for snorkeling","Kayak through the sea caves of Phang Nga Bay","Visit the Big Buddha hilltop statue","Explore the historic Sino-Portuguese streets of Old Town","Spend a morning at an ethical elephant sanctuary","Watch a live Muay Thai fight at a local stadium","Take a Thai cooking class on the beach"]},
+
+  {name:"Maui",location:"Hawaii, USA",tags:["beach","adventure"],
+   desc:"Known as the 'Valley Isle,' Maui is home to Haleakalā, a dormant shield volcano rising 3,055 m — high enough to watch a sunrise above the clouds. The 64-km Road to Hana winds through 59 bridges and rainforest waterfalls. Maui's west coast waters are a primary winter habitat for North Pacific humpback whales.",
+   image:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80",
+   rating:4.8,price:3,bestTime:"Apr – May, Sep – Nov",
+   flights:{NYC:11,LAX:6,CHI:10,MIA:12,DAL:9,SEA:6,LON:17,TOR:11},
+   activities:["Drive the Road to Hana and swim at Twin Falls","Wake before sunrise and hike Haleakalā volcano crater","Whale watch from a catamaran (Dec–Mar)","Snorkel the Molokini Crater marine sanctuary","Zipline over the rainforest canopy","Visit the historic whaling town of Lahaina","Attend a traditional Hawaiian luau on the beach"]},
+
+  {name:"Fiji",location:"South Pacific Ocean",tags:["beach","adventure"],
+   desc:"An archipelago of 333 islands, Fiji is consistently rated among the world's top five dive destinations. The Somosomo Strait — nicknamed the 'Soft Coral Capital of the World' — contains coral diversity rivalling the Great Barrier Reef. On land, the interior highlands hold ancient rainforests and the Sabeto hot springs.",
+   image:"https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=800&q=80",
+   rating:4.8,price:2,bestTime:"Jul – Sep",
+   flights:{NYC:17,LAX:11,CHI:16,MIA:18,DAL:15,SEA:11,LON:21,TOR:17},
+   activities:["Dive the Somosomo Strait's rainbow-hued soft corals","Participate in a kava ceremony with a local village","Kayak through mangrove channels on Viti Levu","Zip-line across the Sabeto mountain range","Snorkel with manta rays at Manta Ray Bay","Stay one night in a traditional Fijian bure (house)","Hike through Bouma National Heritage Park"]},
+
+  {name:"Amalfi Coast",location:"Campania, Italy",tags:["beach","cultural"],
+   desc:"A UNESCO World Heritage Site since 1997, the Amalfi Coast stretches 50 km along southern Italian shoreline where cliffs plunge straight into the Tyrrhenian Sea. Thirteen historic towns cling to the rock faces. The town of Amalfi helped establish the world's first maritime laws in the 11th century.",
+   image:"https://images.unsplash.com/photo-1534445538923-ab38e8740c4d?w=800&q=80",
+   rating:4.8,price:3,bestTime:"May – Oct",
+   flights:{NYC:9,LAX:13,CHI:10,MIA:10,DAL:12,SEA:13,LON:3,TOR:10},
+   activities:["Drive (or hire a driver for) the iconic coastal road","Hike the Path of the Gods from Agerola to Positano","Take a private boat to swim in sea caves","Tour a lemon grove and make limoncello","Visit Ravello's Villa Rufolo gardens","Explore the medieval Amalfi Cathedral","Day trip by ferry to the island of Capri"]},
+
+  {name:"Seychelles",location:"Indian Ocean, East Africa",tags:["beach"],
+   desc:"The Seychelles' 115 islands are the world's only mid-ocean granitic archipelago — the giant rounded boulders on Anse Source d'Argent beach are hundreds of millions of years old. Over 50% of land is protected reserve. The islands shelter the Coco de Mer palm, which produces the world's largest seed (up to 25 kg).",
+   image:"https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800&q=80",
+   rating:4.9,price:3,bestTime:"Apr – May, Oct – Nov",
+   flights:{NYC:18,LAX:22,CHI:19,MIA:19,DAL:19,SEA:22,LON:10,TOR:19},
+   activities:["Snorkel at Anse Source d'Argent — one of Earth's most beautiful beaches","Visit the giant Aldabra tortoises at the Nature Reserve","Island-hop between Mahé, Praslin, and La Digue by ferry","Hike the Vallée de Mai UNESCO palm forest","Take a glass-bottom boat to see corals without getting wet","Try a Creole seafood cooking class","Kayak around the granitic coves at sunset"]},
+
+  {name:"Dubrovnik",location:"Croatia",tags:["beach","cultural"],
+   desc:"Known as the 'Pearl of the Adriatic,' Dubrovnik's medieval walled old city has been a UNESCO World Heritage Site since 1979. The limestone city walls — some over 25 metres tall — have survived nearly intact since the 14th century. The city doubled as King's Landing in Game of Thrones.",
+   image:"https://images.unsplash.com/photo-1587974928442-77dc3e0dba72?w=800&q=80",
+   rating:4.7,price:2,bestTime:"May – Sep",
+   flights:{NYC:11,LAX:15,CHI:12,MIA:12,DAL:13,SEA:14,LON:3,TOR:11},
+   activities:["Walk the full 2-km circuit of the ancient city walls","Take the cable car to Mount Srđ for panoramic views","Sea kayak around the old town's sea walls","Day trip by boat to Lokrum Island","Spot Game of Thrones filming locations on a guided tour","Taste fresh oysters in the village of Ston","Take an evening sunset cruise along the Dalmatian coast"]},
+
+  /* ── MOUNTAIN ── */
+  {name:"Banff",location:"Alberta, Canada",tags:["mountain","adventure"],
+   desc:"Canada's first national park, established in 1885, Banff protects 6,641 km² of the Canadian Rockies. Lake Louise gets its turquoise colour from glacial rock flour suspended in the water. The park contains over 1,000 km of hiking trails and shelters wildlife including grizzly bears, wolves, and mountain caribou.",
+   image:"https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80",
+   rating:4.9,price:2,bestTime:"Jun – Sep",
+   flights:{NYC:5,LAX:4,CHI:4,MIA:6,DAL:4,SEA:2,LON:10,TOR:5},
+   activities:["Canoe on the impossibly turquoise Lake Louise","Drive the Icefields Parkway — one of Earth's great scenic roads","Ski or snowboard at Sunshine Village or Lake Louise resort","Hike to the Plain of Six Glaciers teahouse","Spot wildlife (elk, bears) on a guided safari","Take the Banff Gondola to Sulphur Mountain summit","Soak in the historic Banff Upper Hot Springs"]},
+
+  {name:"Swiss Alps",location:"Switzerland",tags:["mountain","adventure"],
+   desc:"The Swiss Alps cover 65% of the country and include the Matterhorn (4,478 m), whose pyramid shape was formed by four glaciers eroding it from all sides. The Aletsch Glacier — the largest in the Alps at 23 km long — is a UNESCO World Heritage Site. Switzerland has 7,700+ km of marked hiking trails.",
+   image:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+   rating:4.9,price:3,bestTime:"Dec – Mar, Jun – Sep",
+   flights:{NYC:9,LAX:12,CHI:10,MIA:10,DAL:11,SEA:12,LON:2,TOR:9},
+   activities:["Ride the Glacier Express scenic train from Zermatt to St. Moritz","Ski or snowboard world-class slopes at Verbier or Zermatt","Hike to a Matterhorn viewpoint above Zermatt","Visit Jungfraujoch — the 'Top of Europe' at 3,454 m","Paraglide from Interlaken over turquoise Lake Thun","Take a cheese and chocolate fondue tasting tour","Cruise Lake Geneva between Montreux and Lausanne"]},
+
+  {name:"Patagonia",location:"Chile & Argentina",tags:["mountain","adventure"],
+   desc:"Shared between Chile and Argentina, Patagonia encompasses the southern tip of South America and some of the least-touched wilderness on Earth. Torres del Paine National Park was voted the world's eighth wonder by National Geographic. The Southern Patagonian Ice Field is the third-largest freshwater reserve in the world.",
+   image:"https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=80",
+   rating:4.8,price:2,bestTime:"Nov – Mar",
+   flights:{NYC:14,LAX:14,CHI:15,MIA:12,DAL:13,SEA:16,LON:17,TOR:15},
+   activities:["Trek the famous W Circuit through Torres del Paine (5 days)","Walk on the Perito Moreno Glacier with crampons","Take a Zodiac cruise through the Grey Glacier icebergs","Horseback ride across the open Pampas with a gaucho","Watch Andean condors soar above the valley","Fly-fish the crystal rivers for giant brown trout","Camp under the southern hemisphere's most star-filled skies"]},
+
+  {name:"Dolomites",location:"Italy",tags:["mountain","cultural"],
+   desc:"Declared a UNESCO World Heritage Site in 2009, the Dolomites contain 18 peaks above 3,000 m. The distinctive pale rock turns rose-gold at sunset in a phenomenon locals call enrosadira. The region straddles Italian and Austrian-German culture, so meals are as likely to feature schnitzel as risotto.",
+   image:"https://images.unsplash.com/photo-1520121401995-928cd50d4e27?w=800&q=80",
+   rating:4.8,price:2,bestTime:"Jul – Sep, Dec – Mar",
+   flights:{NYC:9,LAX:13,CHI:10,MIA:10,DAL:12,SEA:13,LON:3,TOR:10},
+   activities:["Hike the Alta Via 1 long-distance trail across the range","Climb a Via Ferrata — iron-rung routes through vertical cliffs","Ski the legendary Sella Ronda circuit (40 km, 4 valleys)","Walk to Lago di Braies, the most beautiful lake in the Alps","Cycle the Great Dolomites Road on an e-bike","Picnic on the Alpe di Siusi — Europe's largest alpine plateau","Try a South Tyrolean wine and speck (cured ham) tasting"]},
+
+  {name:"Nepal Himalayas",location:"Nepal",tags:["mountain","cultural","adventure"],
+   desc:"Nepal contains eight of the world's 14 peaks above 8,000 m, including Everest (8,849 m). The classic Everest Base Camp trek covers 130 km round-trip and passes through the Khumbu region, home to the Sherpa people. Kathmandu's Durbar Square and the birthplace of Buddha at Lumbini are both UNESCO World Heritage Sites.",
+   image:"https://images.unsplash.com/photo-1585016495481-91613db79698?w=800&q=80",
+   rating:4.9,price:1,bestTime:"Mar – May, Sep – Nov",
+   flights:{NYC:17,LAX:19,CHI:17,MIA:18,DAL:17,SEA:20,LON:9,TOR:17},
+   activities:["Trek to Everest Base Camp (14-day guided trek)","Paraglide from Sarangkot over the Pokhara valley","White-water raft the wild Trishuli River gorge","Visit the giant Boudhanath Stupa in Kathmandu","Watch sunrise on the Himalayas from Nagarkot hilltop","Jungle safari in Chitwan National Park for rhinos and tigers","Explore the ancient temples of Bhaktapur Durbar Square"]},
+
+  {name:"Scottish Highlands",location:"Scotland, UK",tags:["mountain","adventure"],
+   desc:"The Highlands cover more than half of Scotland but are home to less than 2% of its population — one of the lowest densities in Europe. Ben Nevis (1,345 m) is the tallest peak in the British Isles. Loch Ness is 37 km long and deep enough to contain the entire population of Earth three times over in water volume.",
+   image:"https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&q=80",
+   rating:4.6,price:2,bestTime:"May – Sep",
+   flights:{NYC:8,LAX:12,CHI:9,MIA:10,DAL:10,SEA:10,LON:2,TOR:9},
+   activities:["Hike to the summit of Ben Nevis — Britain's highest peak","Search for Nessie on a Loch Ness boat tour","Drive the dramatic Glen Coe valley","Take the ferry to the Isle of Skye and hike the Quiraing","Tour a single-malt whisky distillery (Glenfiddich or Talisker)","Spot dolphins and seals on the Moray Firth","Visit Eilean Donan Castle — Scotland's most photographed castle"]},
+
+  {name:"Norwegian Fjords",location:"Norway",tags:["mountain","adventure"],
+   desc:"The Norwegian fjords were carved by glaciers over 2.5 million years during the Ice Age, creating cliffs that plunge up to 1,300 m into seawater. Geirangerfjord and Nærøyfjord are UNESCO World Heritage Sites. The Flåm Railway descends 863 m in 20 km and is frequently rated one of the world's most scenic rail journeys.",
+   image:"https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80",
+   rating:4.8,price:3,bestTime:"May – Sep",
+   flights:{NYC:9,LAX:13,CHI:10,MIA:11,DAL:12,SEA:12,LON:2,TOR:10},
+   activities:["Cruise through Geirangerfjord past the Seven Sisters waterfall","Ride the dramatic Flåm Railway from mountain to fjord","Kayak on the narrow Nærøyfjord — a UNESCO wonder","Hike to the Stegastein viewpoint — 650 m cliff-edge view","Chase the Northern Lights from a glass-roofed cabin (winter)","Drive the iconic Atlantic Ocean Road suspended over the sea","Explore the colourful wooden wharf (Bryggen) in Bergen"]},
+
+  {name:"Azores",location:"Portugal (North Atlantic)",tags:["mountain","adventure"],
+   desc:"Nine volcanic islands rising from the Mid-Atlantic Ridge, roughly equidistant between Europe and North America. São Miguel's Sete Cidades caldera contains two lakes — one blue, one green — separated by a narrow bridge. Blue and sperm whales pass through Azorean waters year-round.",
+   image:"https://images.unsplash.com/photo-1548574505-5e239809ee19?w=800&q=80",
+   rating:4.7,price:2,bestTime:"Apr – Oct",
+   flights:{NYC:5,LAX:10,CHI:7,MIA:6,DAL:8,SEA:10,LON:3,TOR:7},
+   activities:["Whale watching — one of the world's best year-round locations","Soak in the Furnas geothermal thermal baths","Hike the rim of Sete Cidades twin-lake caldera","Taste cozido — a stew cooked underground by volcanic heat","Canyon through waterfalls in Ribeira dos Caldeirões park","Dive the crystal-clear waters around Faial island","Visit Terceira island's UNESCO-listed Angra do Heroísmo town"]},
+
+  /* ── CITY ── */
+  {name:"Tokyo",location:"Japan",tags:["city","cultural"],
+   desc:"The Greater Tokyo Area, with 37.4 million people, is the world's most populous metropolitan area. Tokyo holds more Michelin stars than any other city on Earth — over 200 starred restaurants as of 2024. The city was almost entirely rebuilt after the 1923 Great Kanto Earthquake and the 1945 firebombings.",
+   image:"https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80",
+   rating:4.9,price:2,bestTime:"Mar – May, Sep – Nov",
+   flights:{NYC:14,LAX:12,CHI:14,MIA:16,DAL:14,SEA:10,LON:12,TOR:14},
+   activities:["Stand at the world's busiest pedestrian crossing — Shibuya Crossing","Visit teamLab Planets digital art museum","Eat fresh sushi at the outer stalls of Tsukiji Market at 7 am","Explore Senso-ji Temple at dawn before crowds arrive","Day trip to Mount Fuji and Lake Kawaguchi","Watch a sumo morning practice session (free entry, early)","Wander Akihabara electronics and anime district at night"]},
+
+  {name:"Paris",location:"France",tags:["city","cultural"],
+   desc:"Paris receives around 50 million tourists per year, making it the world's most visited city for decades. The Louvre holds 480,000 objects across 72,735 m² of floor space — walking every gallery covers roughly 15 km. The Eiffel Tower, built as a temporary exhibit for the 1889 World's Fair, was saved from demolition because it served as a radio antenna.",
+   image:"https://images.unsplash.com/photo-1502602915736-0940c15cae27?w=800&q=80",
+   rating:4.7,price:3,bestTime:"Apr – Jun, Sep – Oct",
+   flights:{NYC:8,LAX:11,CHI:9,MIA:9,DAL:10,SEA:11,LON:2,TOR:8},
+   activities:["See the Eiffel Tower sparkle at 10 pm — it lights up every hour","Spend a morning in the Louvre (arrive before 9 am)","Take a Seine River dinner cruise at sunset","Climb Montmartre to Sacré-Cœur for views over all of Paris","Day trip to the Palace of Versailles and its gardens","Take a croissant and pastry-making class with a French chef","Tour the eerie Paris Catacombs — 6 million skeletons beneath the city"]},
+
+  {name:"Barcelona",location:"Spain",tags:["city","cultural","beach"],
+   desc:"Barcelona is the capital of Catalonia, a region with its own language (Catalan) and distinct culture. The Sagrada Família has been under construction since 1882 — architect Antoni Gaudí is buried in its crypt — and is expected to complete around 2026. Barcelona has seven UNESCO-listed modernist buildings by Gaudí alone.",
+   image:"https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=800&q=80",
+   rating:4.7,price:2,bestTime:"May – Jun, Sep – Oct",
+   flights:{NYC:8,LAX:12,CHI:10,MIA:9,DAL:11,SEA:12,LON:2,TOR:9},
+   activities:["Tour the soaring interior of the Sagrada Família at opening time","Explore Park Güell's mosaic terraces and city views","Browse La Boqueria market for jamón, cheese, and fresh juice","Spend an afternoon on Barceloneta beach","Walk the Gothic Quarter's medieval lanes at night","Take a stadium tour at Camp Nou — the largest in Europe","Day trip by train to the Montserrat mountain monastery"]},
+
+  {name:"New York City",location:"USA",tags:["city"],
+   desc:"Home to 8.3 million people who speak over 800 languages — the most linguistically diverse city in history. The NYC subway runs 24/7 across 245 stations. Central Park receives 42 million visitors per year — more than Yellowstone, Yosemite, and the Grand Canyon combined.",
+   image:"https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800&q=80",
+   rating:4.6,price:3,bestTime:"Apr – Jun, Sep – Nov",
+   flights:{NYC:0,LAX:5,CHI:2,MIA:3,DAL:3,SEA:5,LON:7,TOR:1},
+   activities:["Walk the Brooklyn Bridge at sunrise for skyline photos","See a Broadway show (buy TKTS discount tickets same-day)","Take the FREE Staten Island Ferry past the Statue of Liberty","Walk the High Line elevated park above the Meatpacking District","Visit the Metropolitan Museum of Art for an entire day","Explore a different NYC neighbourhood's food scene each evening","Take the 7 train to Queens for the world's best food tour"]},
+
+  {name:"London",location:"England, UK",tags:["city","cultural"],
+   desc:"Founded as 'Londinium' by the Romans in 43 AD, London was the first city to hit a population of one million (around 1800). The British Museum receives 6 million visitors yearly and holds over 8 million objects collected over 250 years. More than 300 languages are spoken in London's schools.",
+   image:"https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800&q=80",
+   rating:4.6,price:3,bestTime:"May – Sep",
+   flights:{NYC:7,LAX:11,CHI:9,MIA:9,DAL:10,SEA:10,LON:0,TOR:8},
+   activities:["Tour the Tower of London and see the Crown Jewels","Spend a day in the free British Museum","Browse Borough Market for world-class street food","See a West End show in the Theatre District","Watch the Changing of the Guard at Buckingham Palace","Wander Notting Hill and browse Portobello Road Market (Saturdays)","Day trip by train to Stonehenge and Bath's Roman Baths"]},
+
+  {name:"Singapore",location:"Southeast Asia",tags:["city","cultural"],
+   desc:"A city-state of just 733 km², Singapore transformed from a colonial trading post to one of the world's wealthiest nations in a single generation. Gardens by the Bay's Supertrees (25–50 m tall) collect solar energy and harvest rainwater. Changi Airport has won 'World's Best Airport' twelve consecutive times.",
+   image:"https://images.unsplash.com/photo-1508964942454-1a56651d54ac?w=800&q=80",
+   rating:4.7,price:3,bestTime:"Feb – Apr",
+   flights:{NYC:19,LAX:18,CHI:19,MIA:21,DAL:19,SEA:18,LON:13,TOR:19},
+   activities:["Watch the nightly light show at Gardens by the Bay (free)","Eat your way around a hawker centre — try chicken rice and laksa","Visit the rooftop infinity pool at Marina Bay Sands SkyPark","Explore three distinct cultures: Little India, Chinatown, Arab Street","See orangutans and slow lorises at Singapore Night Zoo","Ride the cable car to Sentosa Island for beaches and Universal Studios","Shop the Orchard Road luxury strip and the Haji Lane boutiques"]},
+
+  {name:"Istanbul",location:"Turkey",tags:["city","cultural"],
+   desc:"The only city in the world that spans two continents (Europe and Asia), divided by the Bosphorus strait. Istanbul has been the capital of three of history's greatest empires: Roman, Byzantine, and Ottoman. The Hagia Sophia, built in 537 AD, held the record for the world's largest dome for nearly 1,000 years.",
+   image:"https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=800&q=80",
+   rating:4.8,price:2,bestTime:"Apr – May, Sep – Nov",
+   flights:{NYC:10,LAX:14,CHI:11,MIA:12,DAL:13,SEA:13,LON:4,TOR:11},
+   activities:["Visit the Hagia Sophia at opening time before crowds arrive","Explore the labyrinthine Grand Bazaar (4,400 shops)","Take a Bosphorus cruise between Europe and Asia","Tour Topkapi Palace and the Ottoman Harem","Relax in a traditional Turkish hammam (bath house)","Browse the Spice Bazaar and sample Turkish delight","Watch the sunset from the Galata Tower rooftop"]},
+
+  {name:"Amsterdam",location:"Netherlands",tags:["city","cultural"],
+   desc:"Amsterdam has more canals than Venice and more bridges than Paris — 165 canals and 1,539 bridges. About 60% of the city lies below sea level, protected by dikes and pumping stations. There are more bicycles than people (900,000 bikes vs. 830,000 residents). The Anne Frank House receives over 1 million visitors per year.",
+   image:"https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?w=800&q=80",
+   rating:4.6,price:2,bestTime:"Apr – May, Sep – Oct",
+   flights:{NYC:8,LAX:11,CHI:9,MIA:9,DAL:10,SEA:11,LON:2,TOR:8},
+   activities:["Visit the Anne Frank House (book online months in advance)","Tour the Van Gogh Museum's stunning collection","Take a 1-hour canal boat tour through the historic ring","Rent a bike and cycle through Vondelpark like a local","Day trip to Keukenhof's 7 million blooming tulips (spring only)","Visit the Rijksmuseum for Rembrandt and Vermeer masterpieces","Day trip to the Zaanse Schans windmill village"]},
+
+  {name:"Prague",location:"Czech Republic",tags:["city","cultural"],
+   desc:"Prague Castle, founded in the 9th century, is the world's largest ancient castle complex — covering 70,000 m². The medieval core escaped major WWII damage, leaving centuries of Gothic, Baroque, and Art Nouveau architecture intact. The Astronomical Clock (Orloj), installed in 1410, is the oldest still operating in its original location.",
+   image:"https://images.unsplash.com/photo-1541849546-216549ae216d?w=800&q=80",
+   rating:4.7,price:1,bestTime:"May – Sep",
+   flights:{NYC:9,LAX:13,CHI:10,MIA:11,DAL:12,SEA:13,LON:2,TOR:10},
+   activities:["Cross Charles Bridge at 6 am — before the crowds","Explore Prague Castle and St. Vitus Cathedral","Watch the Astronomical Clock strike the hour in Old Town Square","Sample Czech pilsner in a traditional beer hall (U Fleků, since 1499)","Take a ghost tour of the Jewish Quarter","Boat cruise on the Vltava River at sunset","Day trip to the UNESCO fairy-tale town of Český Krumlov"]},
+
+  {name:"Dubai",location:"UAE",tags:["city","adventure"],
+   desc:"As recently as 1960, Dubai had fewer than 50,000 people and virtually no infrastructure. Today it's home to the Burj Khalifa (828 m), the world's tallest building. Dubai Mall is the world's largest shopping centre by total area. The city receives over 16 million international visitors per year.",
+   image:"https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80",
+   rating:4.6,price:3,bestTime:"Nov – Mar",
+   flights:{NYC:12,LAX:16,CHI:13,MIA:14,DAL:14,SEA:15,LON:7,TOR:13},
+   activities:["Ride the elevator to the Burj Khalifa observation deck (148th floor)","Go dune bashing and camel riding on a desert safari","Ski indoors at Ski Dubai inside the Mall of the Emirates","Browse the Gold Souk and Spice Souk in Deira","Walk across the Dubai Frame with its glass-floor bridge","Take a wooden dhow dinner cruise past the illuminated skyline","Day trip to the restored Al Fahidi historical neighbourhood"]},
+
+  /* ── ADVENTURE ── */
+  {name:"New Zealand",location:"Oceania",tags:["adventure","mountain"],
+   desc:"Queenstown is widely called the 'Adventure Capital of the World' — AJ Hackett launched the world's first commercial bungee jump here in 1988. New Zealand's Fiordland National Park is a UNESCO World Heritage Site where Milford Sound receives up to 8 metres of rain per year.",
+   image:"https://images.unsplash.com/photo-1507699622108-4be3abd695ad?w=800&q=80",
+   rating:4.9,price:2,bestTime:"Dec – Feb",
+   flights:{NYC:18,LAX:13,CHI:17,MIA:19,DAL:17,SEA:13,LON:24,TOR:18},
+   activities:["Bungee jump off the original Kawarau Bridge in Queenstown","Cruise Milford Sound past Mitre Peak and waterfalls","Hike the Tongariro Alpine Crossing — NZ's greatest day walk","Visit the Hobbiton movie set in Matamata","Sea-kayak Abel Tasman National Park's golden-beach coastline","Skydive over Lake Wanaka from 15,000 feet","White-water raft the Grade 5 Kaituna River near Rotorua"]},
+
+  {name:"Costa Rica",location:"Central America",tags:["adventure","beach"],
+   desc:"Despite covering only 0.03% of Earth's surface, Costa Rica contains roughly 5% of the world's biodiversity — 500,000 species, 900 species of birds, and 35,000 insect species. The country abolished its military in 1948 and redirected the budget to education and nature. Nearly 99% of electricity comes from renewable sources.",
+   image:"https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=800&q=80",
+   rating:4.7,price:1,bestTime:"Dec – Apr",
+   flights:{NYC:6,LAX:6,CHI:6,MIA:3,DAL:4,SEA:7,LON:12,TOR:7},
+   activities:["Zip-line through the Monteverde cloud forest canopy","Hike the trails of Manuel Antonio National Park for sloths","White-water raft the Class IV–V Pacuare River","Watch nesting sea turtles on the Caribbean coast (Jul–Oct)","Soak in the Tabacón hot springs below Arenal Volcano","Visit a sloth sanctuary and a butterfly garden","Surf the Pacific waves at Tamarindo or Nosara"]},
+
+  {name:"Iceland",location:"North Atlantic",tags:["adventure"],
+   desc:"Iceland sits atop the Mid-Atlantic Ridge where two tectonic plates pull apart at 2.5 cm per year. This gives the island 130 volcanic systems, 10,000+ waterfalls, 269 glaciers covering 11% of the land, and geothermal energy that heats 87% of all homes for free. Northern Lights are visible September–March.",
+   image:"https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=800&q=80",
+   rating:4.8,price:3,bestTime:"Jun – Aug, Dec – Feb",
+   flights:{NYC:6,LAX:10,CHI:8,MIA:8,DAL:9,SEA:9,LON:3,TOR:7},
+   activities:["Chase the Northern Lights on a guided night tour (Sep–Mar)","Do the Golden Circle: Geysir, Gullfoss waterfall, Þingvellir","Soak in the famous Blue Lagoon geothermal spa","Hike on the Vatnajökull glacier with crampons and a guide","Snorkel the crystal-clear Silfra fissure between two continents","Whale watch from Húsavík — Europe's whale watching capital","Watch puffins nest on sea cliffs near Vík (May–Aug)"]},
+
+  {name:"Serengeti & Masai Mara",location:"Tanzania & Kenya",tags:["adventure","cultural"],
+   desc:"The Serengeti-Mara ecosystem hosts the Great Migration — 1.5 million wildebeest, 400,000 zebras, and 200,000 gazelles moving 800 km in a circular annual route. The Serengeti National Park, established in 1951, protects 14,763 km² and contains the largest lion population in Africa.",
+   image:"https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80",
+   rating:4.9,price:3,bestTime:"Jul – Oct",
+   flights:{NYC:17,LAX:20,CHI:18,MIA:18,DAL:18,SEA:20,LON:9,TOR:17},
+   activities:["Game drive at dawn to see lions hunt on the open plains","Hot air balloon over the Serengeti at sunrise","Visit an authentic Maasai village and learn about their traditions","Witness the Great Migration river crossing (Jul–Sep)","Night drive to spot leopards, hyenas, and aardvarks","Tour the Ngorongoro Crater — the world's largest intact caldera","Extend your trip to Zanzibar for beach and spice tours"]},
+
+  {name:"Galápagos Islands",location:"Ecuador (Pacific Ocean)",tags:["adventure"],
+   desc:"Charles Darwin's 1835 visit was instrumental in developing the theory of evolution by natural selection. The islands sit at the confluence of three major ocean currents, creating a unique ecosystem where sea lions swim with penguins and iguanas dive into the sea. 97% of the archipelago is designated national park.",
+   image:"https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=800&q=80",
+   rating:4.9,price:3,bestTime:"Jun – Dec",
+   flights:{NYC:10,LAX:8,CHI:9,MIA:7,DAL:8,SEA:9,LON:14,TOR:10},
+   activities:["Snorkel with playful sea lions on Española Island","See giant tortoises in their natural habitat on Santa Cruz","Hike Bartolomé Island for the iconic Pinnacle Rock view","Kayak around Kicker Rock with hammerhead sharks below","Watch blue-footed boobies perform their mating dance","Night snorkel with white-tip reef sharks and manta rays","Visit the Charles Darwin Research Station"]},
+
+  {name:"Amazon Rainforest",location:"Brazil & Peru",tags:["adventure","cultural"],
+   desc:"The Amazon Basin covers 7 million km² across nine countries and contains 40,000 plant species, 1,300 bird species, and an estimated 10% of all species on Earth. The Amazon River discharges 20% of all freshwater entering the world's oceans. Indigenous communities in the region speak over 300 distinct languages.",
+   image:"https://images.unsplash.com/photo-1534786432-17f23db37f15?w=800&q=80",
+   rating:4.7,price:2,bestTime:"Jun – Nov",
+   flights:{NYC:9,LAX:10,CHI:10,MIA:7,DAL:8,SEA:11,LON:14,TOR:10},
+   activities:["Stay in a jungle lodge and wake to howler monkeys","Fish for piranha in a blackwater river with a local guide","Spot pink river dolphins (boto) from a dugout canoe","Walk a canopy treetop walkway 30 m above the forest floor","Night boat tour with a spotlight to find caiman eyes glowing","Visit an indigenous community and learn traditional plant medicine","Search for anacondas in the flooded igapó forest"]},
+
+  /* ── CULTURAL ── */
+  {name:"Machu Picchu",location:"Peru",tags:["cultural","adventure"],
+   desc:"Built around 1450 AD by Inca emperor Pachacuti, Machu Picchu was abandoned less than a century later during the Spanish conquest and remained unknown to the outside world until Hiram Bingham III rediscovered it in 1911. The site's 200 dry-stone structures were assembled so precisely a knife blade cannot be inserted between the blocks.",
+   image:"https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800&q=80",
+   rating:4.9,price:2,bestTime:"May – Sep",
+   flights:{NYC:10,LAX:9,CHI:11,MIA:7,DAL:9,SEA:11,LON:15,TOR:11},
+   activities:["Arrive at the Sun Gate (Inti Punku) for the classic first view at sunrise","Hike the vertiginous Huayna Picchu peak for aerial views","Trek the 4-day Inca Trail for the most dramatic approach","Soak in the natural hot springs in Aguas Calientes town below","Tour the Sacred Valley and the Ollantaytambo fortress","Explore the colonial city of Cusco and its Inca stonework","Hike Rainbow Mountain (Vinicunca) — a striped geological wonder"]},
+
+  {name:"Kyoto",location:"Japan",tags:["cultural"],
+   desc:"Japan's imperial capital for over a thousand years (794–1868), Kyoto is home to 17 UNESCO World Heritage Sites including 1,600 Buddhist temples, 400 Shinto shrines, and three historic palace complexes. During cherry blossom season in late March, the city's 200,000+ cherry trees draw over 10 million visitors.",
+   image:"https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800&q=80",
+   rating:4.9,price:2,bestTime:"Mar – May, Oct – Nov",
+   flights:{NYC:15,LAX:12,CHI:14,MIA:16,DAL:15,SEA:11,LON:13,TOR:14},
+   activities:["Walk the 10,000 torii gate tunnel at Fushimi Inari shrine at dawn","Stroll through Arashiyama's magical bamboo grove","Try to spot geisha on the lantern-lit lanes of Gion district","Participate in a traditional tea ceremony in a tatami room","Walk the Philosopher's Path canal lined with cherry trees","Explore Nishiki Market — 'Kyoto's Kitchen' — for street food","Rent a kimono and cycle between temples in the Higashiyama district"]},
+
+  {name:"Marrakech",location:"Morocco",tags:["cultural"],
+   desc:"Founded in 1062 by the Almoravid dynasty, Marrakech has served as Morocco's capital four times across its history. The medina (old city) is a UNESCO World Heritage Site whose medieval street plan remains almost unchanged. Djemaa el-Fna square was designated a UNESCO Intangible Cultural Heritage in 2001 — the first public space to receive this honour.",
+   image:"https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=800&q=80",
+   rating:4.6,price:1,bestTime:"Mar – May, Sep – Nov",
+   flights:{NYC:10,LAX:14,CHI:11,MIA:11,DAL:12,SEA:14,LON:4,TOR:11},
+   activities:["Get lost in the medieval souk maze (hire a guide to find your way out)","Watch Djemaa el-Fna square transform at dusk — musicians, storytellers, acrobats","Admire the intricate tilework of the Ben Youssef Madrasa","Visit Majorelle Garden, once owned by Yves Saint Laurent","Experience a traditional hammam and argan oil massage","Take a cooking class and learn to make a proper tagine","Day trip to the Sahara dunes at Merzouga for a camel ride and overnight camp"]},
+
+  {name:"Rome",location:"Italy",tags:["cultural"],
+   desc:"Rome has been continuously inhabited for over 2,800 years and contains more UNESCO World Heritage Sites within its city limits than any other city in the world. The Colosseum, completed in 80 AD, held up to 80,000 spectators. It is estimated that more than half of all surviving ancient marble artworks in existence are in Rome.",
+   image:"https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800&q=80",
+   rating:4.8,price:2,bestTime:"Apr – Jun, Sep – Oct",
+   flights:{NYC:9,LAX:13,CHI:10,MIA:10,DAL:12,SEA:13,LON:3,TOR:10},
+   activities:["Tour the Colosseum, Roman Forum, and Palatine Hill (book ahead)","Visit the Vatican Museums and Sistine Chapel early morning","Toss a coin in the Trevi Fountain at dawn before crowds arrive","Wander Campo de' Fiori market and eat supplì (fried rice balls)","See Caravaggio's paintings in the Borghese Gallery","Take a food tour through Trastevere neighbourhood at night","Day trip to Pompeii — the city frozen in time by Vesuvius in 79 AD"]},
+
+  {name:"Athens",location:"Greece",tags:["cultural"],
+   desc:"Athens has a recorded history spanning 3,400 years and the Acropolis hill has been continuously inhabited since the 4th millennium BC. The Parthenon was built between 447 and 432 BC. Athens is widely considered the birthplace of democracy, philosophy, the Olympic Games, and Western theatre.",
+   image:"https://images.unsplash.com/photo-1603565816030-6b389eeb23cb?w=800&q=80",
+   rating:4.7,price:2,bestTime:"Apr – Jun, Sep – Oct",
+   flights:{NYC:10,LAX:14,CHI:11,MIA:11,DAL:12,SEA:14,LON:4,TOR:11},
+   activities:["Climb the Acropolis at opening time for empty photographs","Spend hours in the National Archaeological Museum","Wander the Plaka neighbourhood's neoclassical streets","Day trip to Cape Sounion to watch the sunset over the Temple of Poseidon","Eat fresh seafood at a taverna in Piraeus harbour","Take an Athens street-food tour through the central market","Day trip to the ancient sanctuary of Delphi — the 'navel of the world'"]},
+
+  {name:"Petra",location:"Jordan",tags:["cultural","adventure"],
+   desc:"Petra was the capital of the Nabataean Kingdom from around 400 BC, with a population that once reached 30,000. Carved entirely into rose-red sandstone cliffs, the Treasury (Al-Khazneh) stands 43 m tall. Swiss explorer Johann Ludwig Burckhardt rediscovered it in 1812 by disguising himself as an Arab pilgrim. It was voted one of the New Seven Wonders of the World in 2007.",
+   image:"https://images.unsplash.com/photo-1579606032821-4e6161c81bd3?w=800&q=80",
+   rating:4.9,price:2,bestTime:"Mar – May, Sep – Nov",
+   flights:{NYC:11,LAX:15,CHI:12,MIA:13,DAL:13,SEA:14,LON:5,TOR:12},
+   activities:["Walk the 1.2-km Siq canyon and emerge before the Treasury at sunrise","Hike 800 steps to the Monastery (Ad Deir) — even more impressive than the Treasury","Take the 'Petra by Night' candlelit tour (Mon, Wed, Thu)","Scramble up the High Place of Sacrifice for panoramic canyon views","Day trip to Wadi Rum desert for a jeep safari among red sandstone arches","Eat mansaf (Jordan's national dish) at a local restaurant in Wadi Musa","Visit the Royal Tombs carved into the cliff face above the main city"]},
+
+  {name:"Angkor Wat",location:"Cambodia",tags:["cultural"],
+   desc:"Built during the Khmer Empire in the early 12th century, Angkor Wat is the world's largest religious monument — covering 162 hectares. The temple complex represents Mount Meru (home of the gods in Hindu cosmology) and is aligned so precisely that sunrise on the spring equinox falls perfectly over the central tower.",
+   image:"https://images.unsplash.com/photo-1599658880436-c61792e70672?w=800&q=80",
+   rating:4.8,price:1,bestTime:"Nov – Feb",
+   flights:{NYC:22,LAX:19,CHI:22,MIA:24,DAL:21,SEA:19,LON:14,TOR:22},
+   activities:["Watch the reflection of sunrise over Angkor Wat in the moat","Explore Ta Prohm — the jungle temple where tree roots consume the walls","See the 216 massive stone faces of the Bayon temple","Hire a bicycle and cycle independently between the temple complexes","Visit the Tonlé Sap lake floating villages","Watch a traditional Apsara dance performance in the evening","Take a cooking class in Siem Reap to learn Khmer cuisine"]},
+
+  {name:"Havana",location:"Cuba",tags:["cultural","city"],
+   desc:"Founded by the Spanish in 1519, Havana's Old City (Habana Vieja) is a UNESCO World Heritage Site. Cuba's relative isolation since the 1960s US embargo created a living time capsule: pre-revolution American cars — kept running for 60+ years through improvised engineering — are still daily drivers throughout the city.",
+   image:"https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=800&q=80",
+   rating:4.5,price:1,bestTime:"Dec – Apr",
+   flights:{NYC:4,LAX:6,CHI:4,MIA:1,DAL:4,SEA:7,LON:10,TOR:5},
+   activities:["Hire a classic 1950s American convertible for a tour of the city","Watch salsa dancing erupt spontaneously in the streets at night","Tour a cigar factory and learn how Cohibas are hand-rolled","Visit Hemingway's favourite bar, La Bodeguita del Medio, for a mojito","Explore the colourful mosaic neighbourhood of Fusterlandia","Watch the nightly Cañonazo cannon-firing ceremony at Morro Castle","Stroll the Malecón seafront at sunset with local families"]},
+
+  {name:"Cairo & Giza",location:"Egypt",tags:["cultural"],
+   desc:"The Great Pyramid of Giza, built around 2560 BC, is the only surviving structure of the original Seven Wonders of the Ancient World. For 3,800 years it held the record as the tallest man-made structure on Earth. The Cairo Egyptian Museum holds over 120,000 ancient artefacts, including the intact tomb treasures of Tutankhamun.",
+   image:"https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800&q=80",
+   rating:4.7,price:1,bestTime:"Oct – Apr",
+   flights:{NYC:11,LAX:15,CHI:12,MIA:13,DAL:13,SEA:15,LON:5,TOR:12},
+   activities:["Enter the interior of the Great Pyramid of Khufu (book ahead)","Visit the Egyptian Museum and see Tutankhamun's golden death mask","Watch the Sound and Light Show at the Pyramids after dark","Cruise the Nile at sunset on a traditional felucca sailboat","Explore Islamic Cairo and the Al-Azhar Mosque","Browse the labyrinthine Khan el-Khalili bazaar for spices and souvenirs","Day trip to Luxor for the Valley of the Kings"]}
+];
+
+/* ── STATE ── */
+const CARDS_PER_PAGE = 9;
+const priceMap   = {1:"$ Budget",2:"$$ Mid-range",3:"$$$ Luxury"};
+const priceClass = {1:"p1",2:"p2",3:"p3"};
+let selectedCity  = null;
 let currentFilter = "all";
-let pool  = [];
-let shown = [];
+let pool=[], shown=[];
 
 /* ── HELPERS ── */
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length-1; i > 0; i--) {
-    const j = Math.floor(Math.random()*(i+1));
-    [a[i],a[j]] = [a[j],a[i]];
-  }
-  return a;
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function stars(r){const f=Math.round(r);return"★".repeat(f)+"☆".repeat(5-f);}
+function tagHtml(t){return t.map(x=>`<span class="tag tag-${x}">${x}</span>`).join("");}
+function gradientFor(tags){
+  if(tags.includes("beach"))     return"linear-gradient(135deg,#0369a1,#0891b2)";
+  if(tags.includes("mountain"))  return"linear-gradient(135deg,#166534,#15803d)";
+  if(tags.includes("city"))      return"linear-gradient(135deg,#4c1d95,#7c3aed)";
+  if(tags.includes("adventure")) return"linear-gradient(135deg,#9d174d,#db2777)";
+  if(tags.includes("cultural"))  return"linear-gradient(135deg,#92400e,#d97706)";
+  return"linear-gradient(135deg,#1e3a5f,#2563eb)";
 }
-function stars(r)    { const f=Math.round(r); return "★".repeat(f)+"☆".repeat(5-f); }
-function tagHtml(t)  { return t.map(x=>`<span class="tag tag-${x}">${x}</span>`).join(""); }
+function emojiFor(tags){
+  if(tags.includes("beach"))     return"🏖️";
+  if(tags.includes("mountain"))  return"🏔️";
+  if(tags.includes("city"))      return"🏙️";
+  if(tags.includes("adventure")) return"🧗";
+  if(tags.includes("cultural"))  return"🏛️";
+  return"🌍";
+}
+function flightLabel(s){
+  if(!selectedCity||s.flights[selectedCity]==null) return null;
+  const h=s.flights[selectedCity];
+  return h===0 ? "You're here!" : `✈ ~${h}h`;
+}
 
-function gradientFor(tags) {
-  if (tags.includes("beach"))     return "linear-gradient(135deg,#0369a1,#0891b2)";
-  if (tags.includes("mountain"))  return "linear-gradient(135deg,#166534,#15803d)";
-  if (tags.includes("city"))      return "linear-gradient(135deg,#4c1d95,#7c3aed)";
-  if (tags.includes("adventure")) return "linear-gradient(135deg,#9d174d,#db2777)";
-  if (tags.includes("cultural"))  return "linear-gradient(135deg,#92400e,#d97706)";
-  return "linear-gradient(135deg,#1e3a5f,#2563eb)";
-}
-function emojiFor(tags) {
-  if (tags.includes("beach"))     return "🏖️";
-  if (tags.includes("mountain"))  return "🏔️";
-  if (tags.includes("city"))      return "🏙️";
-  if (tags.includes("adventure")) return "🧗";
-  if (tags.includes("cultural"))  return "🏛️";
-  return "🌍";
-}
+/* ── BUILD CITY BUTTONS ── */
+const cityBtnsEl = document.getElementById("cityBtns");
+CITIES.forEach(c=>{
+  const btn=document.createElement("button");
+  btn.className="city-btn";
+  btn.textContent=`${c.emoji} ${c.name}`;
+  btn.dataset.id=c.id;
+  btn.addEventListener("click",()=>{
+    if(selectedCity===c.id){ selectedCity=null; btn.classList.remove("active"); }
+    else {
+      selectedCity=c.id;
+      cityBtnsEl.querySelectorAll(".city-btn").forEach(b=>b.classList.remove("active"));
+      btn.classList.add("active");
+    }
+    render();
+  });
+  cityBtnsEl.appendChild(btn);
+});
 
 /* ── RENDER CARDS ── */
-function render() {
-  const grid  = document.getElementById("grid");
-  const count = document.getElementById("count");
-  count.textContent = pool.length === 0
-    ? "No destinations found"
-    : `Showing ${shown.length} of ${pool.length} destination${pool.length!==1?"s":""}`;
+function render(){
+  const grid=document.getElementById("grid");
+  const count=document.getElementById("count");
+  count.textContent=pool.length===0?"No destinations found":`Showing ${shown.length} of ${pool.length} destination${pool.length!==1?"s":""}`;
+  if(!shown.length){grid.innerHTML=`<div class="empty"><h3>No destinations found</h3><p>Try a different filter.</p></div>`;return;}
 
-  if (!shown.length) {
-    grid.innerHTML = `<div class="empty"><h3>No destinations found</h3><p>Try a different filter.</p></div>`;
-    return;
-  }
-  grid.innerHTML = shown.map((s,i) => `
-    <div class="card" style="animation-delay:${i*0.05}s" data-name="${s.name}">
+  grid.innerHTML=shown.map((s,i)=>{
+    const fl=flightLabel(s);
+    return`<div class="card" style="animation-delay:${i*.05}s" data-name="${s.name}">
       <div class="card-img-wrap" style="background:${gradientFor(s.tags)}">
         <div class="card-img-bg">${emojiFor(s.tags)}</div>
         <img class="card-img" src="${s.image}" alt=""
-             onerror="this.onerror=null;this.src='${BLANK}';" loading="lazy" />
+             onerror="this.onerror=null;this.src='${BLANK}';" loading="lazy"/>
+        ${fl?`<div class="flight-badge" style="display:block">${fl}</div>`:""}
       </div>
       <div class="card-body">
         <div class="card-tags">${tagHtml(s.tags)}</div>
@@ -673,54 +641,58 @@ function render() {
         </div>
         <p class="card-hint">Click to see things to do →</p>
       </div>
-    </div>`).join("");
+    </div>`}).join("");
 
-  // attach click listeners
-  grid.querySelectorAll(".card").forEach(card => {
-    card.addEventListener("click", () => {
-      const spot = spots.find(s => s.name === card.dataset.name);
-      if (spot) openModal(spot);
+  grid.querySelectorAll(".card").forEach(card=>{
+    card.addEventListener("click",()=>{
+      const spot=spots.find(s=>s.name===card.dataset.name);
+      if(spot) openModal(spot);
     });
   });
 }
 
-/* ── PICK NEW RANDOM SUBSET ── */
-function pickNewSubset() {
-  if (pool.length <= CARDS_PER_PAGE) { shown = shuffle(pool); return; }
-  const shownNames = new Set(shown.map(s=>s.name));
-  let candidates = pool.filter(s=>!shownNames.has(s.name));
-  if (candidates.length < CARDS_PER_PAGE) candidates = shuffle(pool);
-  else candidates = shuffle(candidates);
-  shown = candidates.slice(0, CARDS_PER_PAGE);
+/* ── PICK SUBSET ── */
+function pickNewSubset(){
+  if(pool.length<=CARDS_PER_PAGE){shown=shuffle(pool);return;}
+  const shownNames=new Set(shown.map(s=>s.name));
+  let candidates=pool.filter(s=>!shownNames.has(s.name));
+  if(candidates.length<CARDS_PER_PAGE) candidates=shuffle(pool);
+  else candidates=shuffle(candidates);
+  shown=candidates.slice(0,CARDS_PER_PAGE);
 }
 
-/* ── APPLY FILTER ── */
-function applyFilter(filter) {
-  currentFilter = filter;
-  pool  = filter === "all" ? [...spots] : spots.filter(s=>s.tags.includes(filter));
-  shown = [];
-  pickNewSubset();
-  render();
+/* ── FILTER ── */
+function applyFilter(filter){
+  currentFilter=filter;
+  pool=filter==="all"?[...spots]:spots.filter(s=>s.tags.includes(filter));
+  shown=[];pickNewSubset();render();
 }
 
 /* ── MODAL ── */
-function openModal(s) {
-  document.getElementById("modalImgWrap").style.background = gradientFor(s.tags);
-  document.getElementById("modalImgBg").textContent = emojiFor(s.tags);
-  const img = document.getElementById("modalImg");
-  img.src = s.image;
-  img.alt = s.name;
-  document.getElementById("modalTags").innerHTML    = tagHtml(s.tags);
-  document.getElementById("modalName").textContent  = s.name;
-  document.getElementById("modalLoc").textContent   = "📍 " + s.location;
-  document.getElementById("modalDesc").textContent  = s.desc;
-  document.getElementById("modalActivities").innerHTML =
-    s.activities.map((a,i)=>`
-      <li class="activity-item">
-        <span class="activity-num">${i+1}</span>
-        <span class="activity-text">${a}</span>
-      </li>`).join("");
-  document.getElementById("modalMeta").innerHTML = `
+function openModal(s){
+  document.getElementById("modalImgWrap").style.background=gradientFor(s.tags);
+  document.getElementById("modalImgBg").textContent=emojiFor(s.tags);
+  const img=document.getElementById("modalImg");
+  img.src=s.image; img.alt=s.name;
+  document.getElementById("modalTags").innerHTML=tagHtml(s.tags);
+  document.getElementById("modalName").textContent=s.name;
+  document.getElementById("modalLoc").textContent="📍 "+s.location;
+  document.getElementById("modalDesc").textContent=s.desc;
+
+  // Flight row
+  const fr=document.getElementById("modalFlightRow");
+  if(selectedCity&&s.flights[selectedCity]!=null){
+    const h=s.flights[selectedCity];
+    const cityName=CITIES.find(c=>c.id===selectedCity)?.name||selectedCity;
+    fr.innerHTML=h===0
+      ?`<div class="modal-flight-row"><span class="modal-flight-icon">🏠</span><div><div class="modal-flight-text">You're already here!</div><div class="modal-flight-sub">${s.name} is in your city</div></div></div>`
+      :`<div class="modal-flight-row"><span class="modal-flight-icon">✈️</span><div><div class="modal-flight-text">~${h} hours from ${cityName}</div><div class="modal-flight-sub">Approximate total travel time including connections</div></div></div>`;
+  } else { fr.innerHTML=""; }
+
+  document.getElementById("modalActivities").innerHTML=
+    s.activities.map((a,i)=>`<li class="activity-item"><span class="activity-num">${i+1}</span><span class="activity-text">${a}</span></li>`).join("");
+
+  document.getElementById("modalMeta").innerHTML=`
     <div class="modal-meta-item">
       <span class="modal-meta-label">Rating</span>
       <span class="modal-meta-value"><span style="color:#f59e0b">${stars(s.rating)}</span> ${s.rating}</span>
@@ -733,43 +705,33 @@ function openModal(s) {
       <span class="modal-meta-label">Budget</span>
       <span class="modal-meta-value ${priceClass[s.price]}">${priceMap[s.price]}</span>
     </div>`;
-  document.getElementById("modal").scrollTop = 0;
+
+  document.getElementById("modal").scrollTop=0;
   document.getElementById("overlay").classList.add("open");
-  document.body.style.overflow = "hidden";
+  document.body.style.overflow="hidden";
 }
-
-function closeModal() {
-  document.getElementById("overlay").classList.remove("open");
-  document.body.style.overflow = "";
-}
-
-document.getElementById("modalClose").addEventListener("click", closeModal);
-document.getElementById("overlay").addEventListener("click", e => {
-  if (e.target === document.getElementById("overlay")) closeModal();
-});
-document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+function closeModal(){document.getElementById("overlay").classList.remove("open");document.body.style.overflow="";}
+document.getElementById("modalClose").addEventListener("click",closeModal);
+document.getElementById("overlay").addEventListener("click",e=>{if(e.target===document.getElementById("overlay"))closeModal();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
 
 /* ── FILTER BUTTONS ── */
-document.querySelectorAll(".filter-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
+document.querySelectorAll(".filter-btn").forEach(btn=>{
+  btn.addEventListener("click",()=>{
     document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
     btn.classList.add("active");
     applyFilter(btn.dataset.filter);
   });
 });
 
-/* ── SHUFFLE BUTTON ── */
-const shuffleBtn  = document.getElementById("shuffleBtn");
-const shuffleIcon = document.getElementById("shuffleIcon");
-shuffleBtn.addEventListener("click", () => {
-  pickNewSubset(); render();
-  shuffleIcon.classList.remove("spin");
-  void shuffleIcon.offsetWidth;
-  shuffleIcon.classList.add("spin");
-  setTimeout(()=>shuffleIcon.classList.remove("spin"), 500);
+/* ── SHUFFLE ── */
+const shuffleIcon=document.getElementById("shuffleIcon");
+document.getElementById("shuffleBtn").addEventListener("click",()=>{
+  pickNewSubset();render();
+  shuffleIcon.classList.remove("spin");void shuffleIcon.offsetWidth;shuffleIcon.classList.add("spin");
+  setTimeout(()=>shuffleIcon.classList.remove("spin"),500);
 });
 
-/* ── INIT ── */
 applyFilter("all");
 </script>
 </body>
