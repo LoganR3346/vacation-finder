@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VoyageFind — Discover Your Perfect Vacation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --blue:    #2563eb;
+      --bg:      #f1f5f9;
+      --surface: #ffffff;
+      --text:    #0f172a;
+      --muted:   #64748b;
+      --border:  #e2e8f0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(140deg, #0f2a5e 0%, #1d4ed8 55%, #0369a1 100%);
+      padding: 90px 24px 64px;
+      text-align: center;
+      color: #fff;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 14px;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      opacity: 0.82;
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ── Sticky filter bar ── */
+    .filter-bar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    }
+    .filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      max-width: 1160px;
+      margin: 0 auto;
+      justify-content: center;
+    }
+    .filter-btn {
+      padding: 8px 20px;
+      border-radius: 999px;
+      border: 2px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: border-color 0.18s, color 0.18s, background 0.18s;
+      font-family: 'Inter', sans-serif;
+      white-space: nowrap;
+    }
+    .filter-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .filter-btn.active {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+    }
+
+    /* ── Main ── */
+    .main {
+      max-width: 1160px;
+      margin: 36px auto 80px;
+      padding: 0 24px;
+    }
+
+    /* results row */
+    .results-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .results-label { color: var(--muted); font-size: 0.88rem; }
+
+    /* Shuffle button */
+    .shuffle-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 20px;
+      border-radius: 999px;
+      border: 2px solid var(--blue);
+      background: var(--blue);
+      color: #fff;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.18s, transform 0.15s;
+    }
+    .shuffle-btn:hover { background: #1d4ed8; }
+    .shuffle-btn:active { transform: scale(0.96); }
+    .shuffle-btn svg { width: 16px; height: 16px; fill: none; stroke: #fff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* spin animation for icon on click */
+    .spin { animation: spin 0.45s ease; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 26px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      animation: rise 0.35s ease both;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0);    }
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 14px 40px rgba(0,0,0,0.14);
+    }
+    .card-img {
+      width: 100%;
+      height: 210px;
+      object-fit: cover;
+      display: block;
+      background: #cbd5e1;
+    }
+    .card-body { padding: 20px 22px 24px; }
+
+    .card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 11px; }
+    .tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+    .tag-beach     { background: #dbeafe; color: #1d4ed8; }
+    .tag-mountain  { background: #dcfce7; color: #166534; }
+    .tag-city      { background: #fef9c3; color: #854d0e; }
+    .tag-adventure { background: #fce7f3; color: #9d174d; }
+    .tag-cultural  { background: #f3e8ff; color: #6b21a8; }
+
+    .card-name     { font-size: 1.2rem; font-weight: 700; margin-bottom: 3px; }
+    .card-location { font-size: 0.84rem; color: var(--muted); margin-bottom: 10px; }
+    .card-desc     { font-size: 0.9rem; line-height: 1.65; color: #475569; margin-bottom: 16px; }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      gap: 12px;
+    }
+    .meta-left { display: flex; flex-direction: column; gap: 3px; }
+    .rating    { font-size: 0.88rem; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+    .stars     { color: #f59e0b; letter-spacing: -1px; }
+    .best-time { font-size: 0.79rem; color: var(--muted); }
+    .price     { font-weight: 700; font-size: 0.93rem; white-space: nowrap; }
+    .p1 { color: #16a34a; }
+    .p2 { color: #ca8a04; }
+    .p3 { color: #dc2626; }
+
+    /* empty state */
+    .empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 0;
+      color: var(--muted);
+    }
+    .empty h3 { font-size: 1.3rem; margin-bottom: 6px; }
+
+    footer {
+      text-align: center;
+      padding: 32px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 560px) {
+      .grid { grid-template-columns: 1fr; }
+      .hero { padding: 60px 20px 44px; }
+      .results-row { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <h1>🌍 Find Your Perfect Vacation</h1>
+  <p>Browse handpicked destinations worldwide. Filter by vibe, then shuffle to discover new spots you might not have considered.</p>
+</section>
+
+<!-- ── Filter Bar ── -->
+<div class="filter-bar">
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">✦ All</button>
+    <button class="filter-btn" data-filter="beach">🏖️ Beach</button>
+    <button class="filter-btn" data-filter="mountain">🏔️ Mountain</button>
+    <button class="filter-btn" data-filter="city">🏙️ City</button>
+    <button class="filter-btn" data-filter="adventure">🧗 Adventure</button>
+    <button class="filter-btn" data-filter="cultural">🏛️ Cultural</button>
+  </div>
+</div>
+
+<!-- ── Content ── -->
+<main class="main">
+  <div class="results-row">
+    <p class="results-label" id="count"></p>
+    <button class="shuffle-btn" id="shuffleBtn">
+      <svg id="shuffleIcon" viewBox="0 0 24 24">
+        <polyline points="16 3 21 3 21 8"/>
+        <line x1="4" y1="20" x2="21" y2="3"/>
+        <polyline points="21 16 21 21 16 21"/>
+        <line x1="15" y1="15" x2="21" y2="21"/>
+      </svg>
+      Shuffle Destinations
+    </button>
+  </div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>VoyageFind &mdash; built for dreamers &amp; planners alike.</footer>
+
+<script>
+/* ─────────────────────────────────────────────
+   SPOT DATABASE  (38 destinations)
+   Sources: UNESCO, Lonely Planet, National Geographic,
+   CIA World Factbook, individual country tourism boards
+───────────────────────────────────────────── */
+const spots = [
+
+  /* ── BEACH ── */
+  {
+    name: "Maldives", location: "Indian Ocean",
+    tags: ["beach"],
+    desc: "An archipelago of 1,192 coral islands spread across 90,000 km² of the Indian Ocean. Nearly 80% of the land sits less than one metre above sea level, making it Earth's lowest-lying nation. The lagoons here host some of the world's richest marine biodiversity — over 2,000 species of fish — and the overwater bungalow was essentially invented here in 1967.",
+    image: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800&q=80",
+    rating: 4.9, price: 3, bestTime: "Nov – Apr"
+  },
+  {
+    name: "Bali", location: "Indonesia",
+    tags: ["beach", "cultural"],
+    desc: "Unlike most of Indonesia, Bali is overwhelmingly Hindu — home to an estimated 20,000 temples and a rich tradition of dance, music, and art that UNESCO recognises as Intangible Cultural Heritage. The island spans just 5,780 km² but packs in towering volcanoes (Mount Agung at 3,031 m), terraced rice paddies, and beginner-friendly surf breaks that made Kuta Beach internationally famous.",
+    image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80",
+    rating: 4.7, price: 1, bestTime: "Apr – Oct"
+  },
+  {
+    name: "Santorini", location: "Greece",
+    tags: ["beach", "cultural"],
+    desc: "Santorini is the rim of a massive volcanic caldera formed after one of history's largest eruptions around 1,600 BC — an event some scholars link to the legend of Atlantis. The island's iconic white architecture with blue-domed churches is a Cycladic building code designed to reflect sunlight. The village of Oia is consistently ranked among the world's top 10 most photographed locations.",
+    image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=800&q=80",
+    rating: 4.8, price: 3, bestTime: "May – Oct"
+  },
+  {
+    name: "Cancún", location: "Quintana Roo, Mexico",
+    tags: ["beach", "cultural"],
+    desc: "Before 1970, Cancún was a tiny fishing village of 100 people on a barrier island. Today it draws over 6 million visitors a year to its 14-mile Hotel Zone, where the Caribbean Sea meets warm, current-free waters averaging 28 °C (82 °F). It also sits within easy reach of Chichén Itzá — one of the New Seven Wonders of the World — and the world's second-largest coral reef system.",
+    image: "https://images.unsplash.com/photo-1510097467424-192d713fd8b2?w=800&q=80",
+    rating: 4.5, price: 2, bestTime: "Dec – Apr"
+  },
+  {
+    name: "Phuket", location: "Thailand",
+    tags: ["beach", "adventure"],
+    desc: "Thailand's largest island at 576 km², Phuket was once wealthy from tin mining and rubber — hence the stately Sino-Portuguese mansions still lining Phuket Old Town's streets. Offshore, the Similan Islands are consistently listed among Asia's best dive sites, and Phang Nga Bay's limestone karst towers — made famous in the James Bond film 'The Man with the Golden Gun' — rise dramatically from emerald water.",
+    image: "https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?w=800&q=80",
+    rating: 4.6, price: 1, bestTime: "Nov – Apr"
+  },
+  {
+    name: "Maui", location: "Hawaii, USA",
+    tags: ["beach", "adventure"],
+    desc: "Known as the 'Valley Isle,' Maui is Hawaii's second-largest island and home to Haleakalā, a dormant shield volcano that rises 3,055 m (10,023 ft) — high enough to watch a sunrise above the clouds. The 64-km Road to Hana winds through 59 bridges and past rainforest waterfalls. Maui's west coast waters are a primary winter habitat for North Pacific humpback whales.",
+    image: "https://images.unsplash.com/photo-1542259009477-d625272157b7?w=800&q=80",
+    rating: 4.8, price: 3, bestTime: "Apr – May, Sep – Nov"
+  },
+  {
+    name: "Fiji", location: "South Pacific Ocean",
+    tags: ["beach", "adventure"],
+    desc: "An archipelago of 333 islands straddling the International Date Line, Fiji is consistently rated among the world's top five dive destinations. The Somosomo Strait — nicknamed the 'Soft Coral Capital of the World' — contains coral diversity rivalling the Great Barrier Reef. On land, the interior highlands of Viti Levu hold ancient rainforests, highland villages, and the Sabeto hot springs.",
+    image: "https://images.unsplash.com/photo-1528127269322-539801943592?w=800&q=80",
+    rating: 4.8, price: 2, bestTime: "Jul – Sep"
+  },
+  {
+    name: "Amalfi Coast", location: "Campania, Italy",
+    tags: ["beach", "cultural"],
+    desc: "A UNESCO World Heritage Site since 1997, the Amalfi Coast stretches 50 km along a narrow strip of southern Italian shoreline where cliffs plunge straight into the Tyrrhenian Sea. Thirteen historic towns cling to the rock faces, connected by a single road carved out in the 1850s. The town of Amalfi itself was once a major maritime republic that helped establish the world's first maritime laws (the Tabula Amalphitana, 11th century).",
+    image: "https://images.unsplash.com/photo-1534445538923-ab38e8740c4d?w=800&q=80",
+    rating: 4.8, price: 3, bestTime: "May – Oct"
+  },
+  {
+    name: "Seychelles", location: "Indian Ocean, East Africa",
+    tags: ["beach"],
+    desc: "The Seychelles' 115 islands are home to the world's only mid-ocean granitic archipelago — the giant rounded boulders on Anse Source d'Argent beach are hundreds of millions of years old. Over 50% of land is protected nature reserve. The islands shelter the Coco de Mer palm, which produces the world's largest seed (up to 25 kg), found nowhere else on Earth.",
+    image: "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800&q=80",
+    rating: 4.9, price: 3, bestTime: "Apr – May, Oct – Nov"
+  },
+  {
+    name: "Dubrovnik", location: "Croatia",
+    tags: ["beach", "cultural"],
+    desc: "Known as the 'Pearl of the Adriatic,' Dubrovnik's medieval walled old city has been a UNESCO World Heritage Site since 1979. The limestone city walls — some over 25 metres tall — have survived nearly intact since the 14th century. The city doubled as King's Landing in Game of Thrones, and its surrounding Dalmatian coast offers more than 1,200 islands, islets, and rocks to explore by boat.",
+    image: "https://images.unsplash.com/photo-1555990793-da11153b2473?w=800&q=80",
+    rating: 4.7, price: 2, bestTime: "May – Sep"
+  },
+
+  /* ── MOUNTAIN ── */
+  {
+    name: "Banff", location: "Alberta, Canada",
+    tags: ["mountain", "adventure"],
+    desc: "Canada's first national park, established in 1885, Banff protects 6,641 km² of the Canadian Rockies. Lake Louise, often described as the 'Jewel of the Canadian Rockies,' gets its turquoise colour from glacial rock flour suspended in the water. The park contains over 1,000 km of hiking trails and shelters wildlife including grizzly bears, wolves, and mountain caribou.",
+    image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80",
+    rating: 4.9, price: 2, bestTime: "Jun – Sep"
+  },
+  {
+    name: "Swiss Alps", location: "Switzerland",
+    tags: ["mountain", "adventure"],
+    desc: "The Swiss Alps cover 65% of the country and include the Matterhorn (4,478 m), whose pyramid shape was formed by four glaciers eroding it from all sides. The Aletsch Glacier — the largest in the Alps at 23 km long — is a UNESCO World Heritage Site. Switzerland's 7,700+ km of marked hiking trails and world-class ski resorts like Verbier and Zermatt attract over 11 million visitors annually.",
+    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+    rating: 4.9, price: 3, bestTime: "Dec – Mar, Jun – Sep"
+  },
+  {
+    name: "Patagonia", location: "Chile & Argentina",
+    tags: ["mountain", "adventure"],
+    desc: "Shared between Chile and Argentina, Patagonia encompasses the southern tip of South America and some of the least-touched wilderness on the planet. Torres del Paine National Park — named for the three granite towers that rise nearly 2,500 m from the steppe — was voted the world's eighth wonder by a 2013 National Geographic poll. The Southern Patagonian Ice Field is the third-largest freshwater reserve in the world.",
+    image: "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=80",
+    rating: 4.8, price: 2, bestTime: "Nov – Mar"
+  },
+  {
+    name: "Dolomites", location: "Italy",
+    tags: ["mountain", "cultural"],
+    desc: "Declared a UNESCO World Heritage Site in 2009, the Dolomites are one of the finest mountain landscapes on Earth. The range contains 18 peaks above 3,000 m and owes its distinctive pale, almost luminous appearance to dolomite rock — a calcium magnesium carbonate that turns rose-gold at sunset in a phenomenon locals call enrosadira. The region straddles Italian and Austrian-German culture (South Tyrol), so meals are as likely to feature schnitzel as risotto.",
+    image: "https://images.unsplash.com/photo-1520121401995-928cd50d4e27?w=800&q=80",
+    rating: 4.8, price: 2, bestTime: "Jul – Sep, Dec – Mar"
+  },
+  {
+    name: "Nepal Himalayas", location: "Nepal",
+    tags: ["mountain", "cultural", "adventure"],
+    desc: "Nepal contains eight of the world's 14 peaks above 8,000 m, including Everest (8,849 m), the highest point on Earth. The classic Everest Base Camp trek covers 130 km round-trip and passes through the Khumbu region, home to the Sherpa people whose culture dates back to Tibetan migration in the 16th century. Kathmandu's Durbar Square and the birthplace of Buddha at Lumbini are both UNESCO World Heritage Sites.",
+    image: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800&q=80",
+    rating: 4.9, price: 1, bestTime: "Mar – May, Sep – Nov"
+  },
+  {
+    name: "Scottish Highlands", location: "Scotland, UK",
+    tags: ["mountain", "adventure"],
+    desc: "The Highlands cover more than half of Scotland but are home to less than 2% of its population — one of the lowest population densities in Europe. Ben Nevis (1,345 m) is the tallest peak in the British Isles. The Great Glen, a fault line running diagonally across the Highlands, holds a chain of lochs including Loch Ness — 37 km long and deep enough to contain the entire population of Earth three times over in water volume.",
+    image: "https://images.unsplash.com/photo-1506377585622-bedcbb5a6d1d?w=800&q=80",
+    rating: 4.6, price: 2, bestTime: "May – Sep"
+  },
+  {
+    name: "Norwegian Fjords", location: "Norway",
+    tags: ["mountain", "adventure"],
+    desc: "The Norwegian fjords were carved by glaciers over 2.5 million years during the Ice Age, creating cliffs that plunge up to 1,300 m straight into seawater. Geirangerfjord and Nærøyfjord are UNESCO World Heritage Sites. The Flåm Railway, which descends 863 m in 20 km through mountain tunnels and past waterfalls, is frequently rated one of the world's most scenic rail journeys. Norway has the world's longest road tunnel (24.5 km, Lærdal Tunnel).",
+    image: "https://images.unsplash.com/photo-1531800109873-0c9f419f7981?w=800&q=80",
+    rating: 4.8, price: 3, bestTime: "May – Sep"
+  },
+  {
+    name: "Azores", location: "Portugal (North Atlantic)",
+    tags: ["mountain", "adventure"],
+    desc: "Nine volcanic islands rising from the Mid-Atlantic Ridge, roughly equidistant between Europe and North America. São Miguel's Sete Cidades caldera contains two lakes — one blue, one green — separated only by a narrow bridge. Geothermal activity on the island of São Miguel is so intense that locals cook a traditional meat stew (cozido) underground in volcanic soil. Blue and sperm whales pass through Azorean waters year-round.",
+    image: "https://images.unsplash.com/photo-1564689750461-caefea1e0c73?w=800&q=80",
+    rating: 4.7, price: 2, bestTime: "Apr – Oct"
+  },
+
+  /* ── CITY ── */
+  {
+    name: "Tokyo", location: "Japan",
+    tags: ["city", "cultural"],
+    desc: "The Greater Tokyo Area, with 37.4 million people, is the world's most populous metropolitan area. Tokyo also holds more Michelin stars than any other city on Earth — as of 2024, over 200 starred restaurants, including 12 with three stars. The city was almost entirely rebuilt after two catastrophic events: the 1923 Great Kanto Earthquake and the 1945 firebombings. Its blend of ultramodern and ancient — neon arcades beside 400-year-old shrines — is unlike anywhere else.",
+    image: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80",
+    rating: 4.9, price: 2, bestTime: "Mar – May, Sep – Nov"
+  },
+  {
+    name: "Paris", location: "France",
+    tags: ["city", "cultural"],
+    desc: "Paris has been the world's most visited city for decades — receiving around 50 million tourists per year. The Louvre, the world's largest and most visited art museum, holds 480,000 objects across 72,735 m² of floor space; walking every gallery would cover roughly 15 km. The Eiffel Tower, built as a temporary exhibit for the 1889 World's Fair, was supposed to be dismantled in 1909 but was saved because it served as a radio antenna.",
+    image: "https://images.unsplash.com/photo-1502602915736-0940c15cae27?w=800&q=80",
+    rating: 4.7, price: 3, bestTime: "Apr – Jun, Sep – Oct"
+  },
+  {
+    name: "Barcelona", location: "Spain",
+    tags: ["city", "cultural", "beach"],
+    desc: "Barcelona is the capital of Catalonia, a region with its own language (Catalan), distinct culture, and complex relationship with Spanish national identity. The Sagrada Família basilica has been under construction since 1882 — architect Antoni Gaudí is buried in its crypt — and is expected to be completed around 2026. Barcelona has seven UNESCO-listed modernist buildings by Gaudí and is home to one of the world's most successful football clubs.",
+    image: "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=800&q=80",
+    rating: 4.7, price: 2, bestTime: "May – Jun, Sep – Oct"
+  },
+  {
+    name: "New York City", location: "USA",
+    tags: ["city"],
+    desc: "Home to 8.3 million people who speak over 800 languages — the most linguistically diverse city in world history. The New York City subway runs 24/7/365 across 245 stations and 340 km of routes, making it one of the only rail systems in the world that never closes. Central Park, the city's 341-hectare green heart, receives more than 42 million visitors per year — more than Yellowstone, Yosemite, and Grand Canyon combined.",
+    image: "https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800&q=80",
+    rating: 4.6, price: 3, bestTime: "Apr – Jun, Sep – Nov"
+  },
+  {
+    name: "London", location: "England, UK",
+    tags: ["city", "cultural"],
+    desc: "Founded as 'Londinium' by the Romans in 43 AD, London is now one of the world's leading financial and cultural centres. It was the first city to hit a population of one million (around 1800). The city's 170+ museums include the British Museum — which receives 6 million visitors yearly and holds over 8 million objects collected over 250 years. More than 300 languages are spoken in London's schools.",
+    image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800&q=80",
+    rating: 4.6, price: 3, bestTime: "May – Sep"
+  },
+  {
+    name: "Singapore", location: "Southeast Asia",
+    tags: ["city", "cultural"],
+    desc: "A city-state of just 733 km² — about 3.5 times the size of Washington, D.C. — Singapore is consistently ranked the world's most visited city relative to its resident population. It transformed from a colonial trading post to one of the world's wealthiest nations in a single generation. Gardens by the Bay's iconic Supertrees (25–50 m tall vertical gardens) collect solar energy and harvest rainwater. Changi Airport has won the World's Best Airport title 12 consecutive times.",
+    image: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=800&q=80",
+    rating: 4.7, price: 3, bestTime: "Feb – Apr"
+  },
+  {
+    name: "Istanbul", location: "Turkey",
+    tags: ["city", "cultural"],
+    desc: "The only city in the world that spans two continents (Europe and Asia), divided by the Bosphorus strait. Istanbul has been the capital of three of history's greatest empires: Roman, Byzantine, and Ottoman. The Hagia Sophia, originally built as a cathedral in 537 AD, served as a mosque, then a museum, then a mosque again — its engineering was so advanced it held the record for the world's largest dome for nearly 1,000 years.",
+    image: "https://images.unsplash.com/photo-1527838832700-5059252407fa?w=800&q=80",
+    rating: 4.8, price: 2, bestTime: "Apr – May, Sep – Nov"
+  },
+  {
+    name: "Amsterdam", location: "Netherlands",
+    tags: ["city", "cultural"],
+    desc: "Amsterdam has more canals than Venice and more bridges than Paris — 165 canals and 1,539 bridges in total. About 60% of the city lies below sea level and is protected by an extensive system of dikes and pumping stations. There are more bicycles than people in Amsterdam (900,000 bikes vs. 830,000 residents). The Anne Frank House, where a Jewish family hid for two years during WWII, receives over a million visitors per year.",
+    image: "https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?w=800&q=80",
+    rating: 4.6, price: 2, bestTime: "Apr – May, Sep – Oct"
+  },
+  {
+    name: "Prague", location: "Czech Republic",
+    tags: ["city", "cultural"],
+    desc: "Prague Castle, founded in the 9th century, is the world's largest ancient castle complex — covering 70,000 m² with palaces, churches, galleries, and gardens. The city's medieval core escaped major damage during WWII, leaving centuries of Romanesque, Gothic, Baroque, and Art Nouveau architecture virtually intact. The Astronomical Clock (Orloj), installed in 1410, is the world's oldest functioning astronomical clock still in its original location.",
+    image: "https://images.unsplash.com/photo-1541849546-216549ae216d?w=800&q=80",
+    rating: 4.7, price: 1, bestTime: "May – Sep"
+  },
+  {
+    name: "Dubai", location: "UAE",
+    tags: ["city", "adventure"],
+    desc: "As recently as 1960, Dubai had a population of fewer than 50,000 people and virtually no infrastructure. Today it's home to the Burj Khalifa (828 m), the world's tallest building, and the Palm Jumeirah, an artificial island visible from space. Dubai Mall is the world's largest shopping centre by total area. The city receives over 16 million international visitors a year, despite summer temperatures that regularly exceed 45 °C (113 °F).",
+    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80",
+    rating: 4.6, price: 3, bestTime: "Nov – Mar"
+  },
+
+  /* ── ADVENTURE ── */
+  {
+    name: "New Zealand", location: "Oceania",
+    tags: ["adventure", "mountain"],
+    desc: "Queenstown is widely called the 'Adventure Capital of the World' — AJ Hackett launched the world's first commercial bungee jump here in 1988 off the Kawarau Bridge. New Zealand's South Island contains the Fiordland National Park, a UNESCO World Heritage Site, where Milford Sound receives up to 8 metres of rain per year, making it one of the world's wettest inhabited places. The country has more species of penguin than any other outside Antarctica.",
+    image: "https://images.unsplash.com/photo-1507699622108-4be3abd695ad?w=800&q=80",
+    rating: 4.9, price: 2, bestTime: "Dec – Feb"
+  },
+  {
+    name: "Costa Rica", location: "Central America",
+    tags: ["adventure", "beach"],
+    desc: "Despite covering only 0.03% of Earth's surface, Costa Rica contains roughly 5% of the world's biodiversity — including 500,000 species, 900 species of birds, and 35,000 species of insects. The country abolished its military in 1948 and redirected that budget to education and environmental protection; today 25% of its land is protected national parks. Nearly 99% of Costa Rica's electricity comes from renewable sources.",
+    image: "https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=800&q=80",
+    rating: 4.7, price: 1, bestTime: "Dec – Apr"
+  },
+  {
+    name: "Iceland", location: "North Atlantic",
+    tags: ["adventure"],
+    desc: "Iceland sits atop the Mid-Atlantic Ridge, where the North American and Eurasian tectonic plates are pulling apart at 2.5 cm per year. This gives the island 130 active and inactive volcanic systems, 10,000+ waterfalls, 269 glaciers (covering 11% of the land), and geothermal energy that heats 87% of all homes for free. The Northern Lights are visible between September and March; in summer, the sun barely sets — providing 24 hours of daylight.",
+    image: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=800&q=80",
+    rating: 4.8, price: 3, bestTime: "Jun – Aug, Dec – Feb"
+  },
+  {
+    name: "Serengeti & Masai Mara", location: "Tanzania & Kenya",
+    tags: ["adventure", "cultural"],
+    desc: "The Serengeti-Mara ecosystem hosts the Great Migration — the largest overland migration of animals on Earth. Every year, 1.5 million wildebeest, 400,000 zebras, and 200,000 gazelles move in a circular 800-km route following rainfall. The Serengeti National Park, established in 1951, protects 14,763 km² and contains the largest lion population in Africa. Tanzania's Ngorongoro Crater is sometimes called 'Africa's Eden.'",
+    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80",
+    rating: 4.9, price: 3, bestTime: "Jul – Oct"
+  },
+  {
+    name: "Galápagos Islands", location: "Ecuador (Pacific Ocean)",
+    tags: ["adventure"],
+    desc: "Charles Darwin's 1835 visit to the Galápagos was instrumental in developing the theory of evolution by natural selection. The islands sit at the confluence of three major ocean currents, creating a unique marine ecosystem where sea lions swim with penguins and iguanas dive into the sea. 97% of the archipelago is designated national park, and marine life here — from whale sharks to manta rays — is so accustomed to humans it has no fear response.",
+    image: "https://images.unsplash.com/photo-1551264290-a1e7e9bc71ec?w=800&q=80",
+    rating: 4.9, price: 3, bestTime: "Jun – Dec"
+  },
+  {
+    name: "Amazon Rainforest", location: "Brazil & Peru",
+    tags: ["adventure", "cultural"],
+    desc: "The Amazon Basin covers 7 million km² across nine countries and contains 40,000 plant species, 1,300 bird species, and an estimated 10% of all species on Earth. The Amazon River discharges 20% of all freshwater entering the world's oceans. Indigenous communities in the region speak over 300 distinct languages. In peak wet season, the forest floor floods to depths of 10 m — trees have adapted to spend half the year underwater.",
+    image: "https://images.unsplash.com/photo-1619546813926-a78fa6372cd2?w=800&q=80",
+    rating: 4.7, price: 2, bestTime: "Jun – Nov"
+  },
+
+  /* ── CULTURAL ── */
+  {
+    name: "Machu Picchu", location: "Peru",
+    tags: ["cultural", "adventure"],
+    desc: "Built around 1450 AD at an elevation of 2,430 m by the Inca emperor Pachacuti, Machu Picchu was abandoned less than a century later during the Spanish conquest and remained unknown to the outside world until Hiram Bingham III rediscovered it in 1911. The site contains 200 structures assembled from dry-stone masonry so precise that a knife blade cannot be inserted between blocks — all without the use of mortar or metal tools.",
+    image: "https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800&q=80",
+    rating: 4.9, price: 2, bestTime: "May – Sep"
+  },
+  {
+    name: "Kyoto", location: "Japan",
+    tags: ["cultural"],
+    desc: "Japan's imperial capital for over a thousand years (794–1868), Kyoto is home to 17 UNESCO World Heritage Sites including 1,600 Buddhist temples, 400 Shinto shrines, and three historic palace complexes. During the spring cherry blossom (sakura) season in late March and early April, the city's 200,000+ cherry trees draw over 10 million visitors. The Fushimi Inari Shrine has more than 10,000 vermilion torii gates climbing the mountain behind it.",
+    image: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800&q=80",
+    rating: 4.9, price: 2, bestTime: "Mar – May, Oct – Nov"
+  },
+  {
+    name: "Marrakech", location: "Morocco",
+    tags: ["cultural"],
+    desc: "Founded in 1062 by the Almoravid dynasty, Marrakech has served as Morocco's capital four times across its history. The medina (old city) is a UNESCO World Heritage Site whose medieval street plan remains almost unchanged. Djemaa el-Fna square has been the city's public marketplace for nearly 1,000 years and was designated a UNESCO Intangible Cultural Heritage in 2001 — the first public space to receive this honour.",
+    image: "https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=800&q=80",
+    rating: 4.6, price: 1, bestTime: "Mar – May, Sep – Nov"
+  },
+  {
+    name: "Rome", location: "Italy",
+    tags: ["cultural"],
+    desc: "Rome has been continuously inhabited for over 2,800 years and contains more UNESCO World Heritage Sites within its city limits than any other city in the world. The Colosseum, completed in 80 AD, held 50,000–80,000 spectators and featured a retractable canvas roof (velarium) — the world's first large-scale retractable roof. It is estimated that more than half of all ancient marble artworks and architectural remnants in existence are in Rome.",
+    image: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800&q=80",
+    rating: 4.8, price: 2, bestTime: "Apr – Jun, Sep – Oct"
+  },
+  {
+    name: "Athens", location: "Greece",
+    tags: ["cultural"],
+    desc: "Athens is one of the world's oldest cities, with a recorded history spanning 3,400 years. The Acropolis hill has been continuously inhabited since the 4th millennium BC. The Parthenon, built between 447 and 432 BC, was a masterpiece of Doric architecture and served as a temple, a Christian church, and a mosque across its long history. Athens is widely considered the birthplace of democracy, philosophy, and the Olympic Games.",
+    image: "https://images.unsplash.com/photo-1555993539-1732b0258235?w=800&q=80",
+    rating: 4.7, price: 2, bestTime: "Apr – Jun, Sep – Oct"
+  },
+  {
+    name: "Petra", location: "Jordan",
+    tags: ["cultural", "adventure"],
+    desc: "Petra was the capital of the Nabataean Kingdom from around 400 BC and its population once reached 30,000 people. Carved entirely into rose-red sandstone cliffs, the city's most famous structure — the Treasury (Al-Khazneh) — stands 43 m tall and was likely a royal tomb. The site was unknown to the Western world until Swiss explorer Johann Ludwig Burckhardt rediscovered it in 1812 by disguising himself as an Arab. It was voted one of the New Seven Wonders of the World in 2007.",
+    image: "https://images.unsplash.com/photo-1548686304-89d188a80029?w=800&q=80",
+    rating: 4.9, price: 2, bestTime: "Mar – May, Sep – Nov"
+  },
+  {
+    name: "Angkor Wat", location: "Cambodia",
+    tags: ["cultural"],
+    desc: "Built during the Khmer Empire in the early 12th century by King Suryavarman II, Angkor Wat is the world's largest religious monument — covering 162 hectares. The temple complex represents Mount Meru (home of the gods in Hindu cosmology) and is aligned so precisely with cardinal directions that sunrise on the spring equinox falls perfectly over the central tower. The greater Angkor Archaeological Park contains over 1,000 temples spread across 400 km².",
+    image: "https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800&q=80",
+    rating: 4.8, price: 1, bestTime: "Nov – Feb"
+  },
+  {
+    name: "Havana", location: "Cuba",
+    tags: ["cultural", "city"],
+    desc: "Founded by the Spanish in 1519, Havana's Old City (Habana Vieja) is a UNESCO World Heritage Site whose 900 buildings span five centuries of architecture — from 16th-century baroque fortresses to Art Deco masterpieces. Cuba's relative isolation since the 1960s US embargo created an extraordinary living time capsule: pre-revolution American cars (known as 'yank tanks') are still daily drivers, kept running for over 60 years through improvised mechanics.",
+    image: "https://images.unsplash.com/photo-1500789204598-39ab2ed4e7b6?w=800&q=80",
+    rating: 4.5, price: 1, bestTime: "Dec – Apr"
+  },
+  {
+    name: "Cairo & Giza", location: "Egypt",
+    tags: ["cultural"],
+    desc: "The Great Pyramid of Giza, built around 2560 BC for Pharaoh Khufu, is the only surviving structure of the original Seven Wonders of the Ancient World. For 3,800 years it held the record as the tallest man-made structure on Earth. The Cairo Egyptian Museum holds the world's largest collection of ancient Egyptian antiquities — over 120,000 items — including the intact tomb treasures of Tutankhamun discovered in 1922.",
+    image: "https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?w=800&q=80",
+    rating: 4.7, price: 1, bestTime: "Oct – Apr"
+  }
+];
+
+/* ─────────────────────────────────────────────
+   CONSTANTS
+───────────────────────────────────────────── */
+const CARDS_PER_PAGE = 9;
+const priceMap   = { 1: "$ Budget", 2: "$$ Mid-range", 3: "$$$ Luxury" };
+const priceClass = { 1: "p1", 2: "p2", 3: "p3" };
+
+let currentFilter = "all";
+let pool = []; // filtered list
+let shown = []; // currently displayed subset
+
+/* ─────────────────────────────────────────────
+   HELPERS
+───────────────────────────────────────────── */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function stars(r) {
+  const full = Math.round(r);
+  return "★".repeat(full) + "☆".repeat(5 - full);
+}
+
+function tagHtml(tags) {
+  return tags.map(t => `<span class="tag tag-${t}">${t}</span>`).join("");
+}
+
+/* ─────────────────────────────────────────────
+   RENDER
+───────────────────────────────────────────── */
+function render() {
+  const grid  = document.getElementById("grid");
+  const count = document.getElementById("count");
+
+  const total   = pool.length;
+  const visible = shown.length;
+
+  count.textContent = total === 0
+    ? "No destinations found"
+    : `Showing ${visible} of ${total} destination${total !== 1 ? "s" : ""}`;
+
+  if (!shown.length) {
+    grid.innerHTML = `<div class="empty"><h3>No destinations found</h3><p>Try a different filter.</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = shown.map((s, i) => `
+    <div class="card" style="animation-delay:${i * 0.05}s">
+      <img class="card-img" src="${s.image}" alt="${s.name}" loading="lazy" />
+      <div class="card-body">
+        <div class="card-tags">${tagHtml(s.tags)}</div>
+        <h2 class="card-name">${s.name}</h2>
+        <p class="card-location">📍 ${s.location}</p>
+        <p class="card-desc">${s.desc}</p>
+        <div class="card-meta">
+          <div class="meta-left">
+            <div class="rating">
+              <span class="stars">${stars(s.rating)}</span> ${s.rating}
+            </div>
+            <div class="best-time">Best time: ${s.bestTime}</div>
+          </div>
+          <span class="price ${priceClass[s.price]}">${priceMap[s.price]}</span>
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+
+/* ─────────────────────────────────────────────
+   PICK NEW RANDOM SUBSET
+   Always picks a fresh set (no repeats from last
+   shown unless pool is too small)
+───────────────────────────────────────────── */
+function pickNewSubset() {
+  if (pool.length <= CARDS_PER_PAGE) {
+    // Show everything in a random order
+    shown = shuffle(pool);
+    return;
+  }
+
+  // Build a set of names currently shown so we avoid showing them again
+  const shownNames = new Set(shown.map(s => s.name));
+  let candidates   = pool.filter(s => !shownNames.has(s.name));
+
+  // If not enough fresh cards, replenish from full pool minus as many as possible
+  if (candidates.length < CARDS_PER_PAGE) {
+    candidates = shuffle(pool);
+  } else {
+    candidates = shuffle(candidates);
+  }
+
+  shown = candidates.slice(0, CARDS_PER_PAGE);
+}
+
+/* ─────────────────────────────────────────────
+   FILTER CHANGE → rebuild pool, pick new subset
+───────────────────────────────────────────── */
+function applyFilter(filter) {
+  currentFilter = filter;
+  pool  = filter === "all" ? [...spots] : spots.filter(s => s.tags.includes(filter));
+  shown = []; // clear so pickNewSubset picks freely
+  pickNewSubset();
+  render();
+}
+
+/* ─────────────────────────────────────────────
+   EVENT LISTENERS
+───────────────────────────────────────────── */
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    applyFilter(btn.dataset.filter);
+  });
+});
+
+const shuffleBtn  = document.getElementById("shuffleBtn");
+const shuffleIcon = document.getElementById("shuffleIcon");
+
+shuffleBtn.addEventListener("click", () => {
+  pickNewSubset();
+  render();
+  // Spin the icon briefly
+  shuffleIcon.classList.remove("spin");
+  void shuffleIcon.offsetWidth; // reflow to restart animation
+  shuffleIcon.classList.add("spin");
+  setTimeout(() => shuffleIcon.classList.remove("spin"), 500);
+});
+
+/* ─────────────────────────────────────────────
+   INIT
+───────────────────────────────────────────── */
+applyFilter("all");
+</script>
+
+</body>
+</html>
