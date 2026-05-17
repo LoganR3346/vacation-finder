@@ -150,12 +150,28 @@
       transform: translateY(-5px);
       box-shadow: 0 14px 40px rgba(0,0,0,0.14);
     }
-    .card-img {
-      width: 100%;
+    .card-img-wrap {
+      position: relative;
       height: 210px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .card-img-bg {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      opacity: 0.25;
+    }
+    .card-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      display: block;
-      background: #cbd5e1;
+      transition: opacity 0.3s;
     }
     .card-body { padding: 20px 22px 24px; }
 
@@ -306,14 +322,14 @@ const spots = [
     name: "Maui", location: "Hawaii, USA",
     tags: ["beach", "adventure"],
     desc: "Known as the 'Valley Isle,' Maui is Hawaii's second-largest island and home to Haleakalā, a dormant shield volcano that rises 3,055 m (10,023 ft) — high enough to watch a sunrise above the clouds. The 64-km Road to Hana winds through 59 bridges and past rainforest waterfalls. Maui's west coast waters are a primary winter habitat for North Pacific humpback whales.",
-    image: "https://images.unsplash.com/photo-1542259009477-d625272157b7?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80",
     rating: 4.8, price: 3, bestTime: "Apr – May, Sep – Nov"
   },
   {
     name: "Fiji", location: "South Pacific Ocean",
     tags: ["beach", "adventure"],
     desc: "An archipelago of 333 islands straddling the International Date Line, Fiji is consistently rated among the world's top five dive destinations. The Somosomo Strait — nicknamed the 'Soft Coral Capital of the World' — contains coral diversity rivalling the Great Barrier Reef. On land, the interior highlands of Viti Levu hold ancient rainforests, highland villages, and the Sabeto hot springs.",
-    image: "https://images.unsplash.com/photo-1528127269322-539801943592?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=800&q=80",
     rating: 4.8, price: 2, bestTime: "Jul – Sep"
   },
   {
@@ -334,7 +350,7 @@ const spots = [
     name: "Dubrovnik", location: "Croatia",
     tags: ["beach", "cultural"],
     desc: "Known as the 'Pearl of the Adriatic,' Dubrovnik's medieval walled old city has been a UNESCO World Heritage Site since 1979. The limestone city walls — some over 25 metres tall — have survived nearly intact since the 14th century. The city doubled as King's Landing in Game of Thrones, and its surrounding Dalmatian coast offers more than 1,200 islands, islets, and rocks to explore by boat.",
-    image: "https://images.unsplash.com/photo-1555990793-da11153b2473?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1587974928442-77dc3e0dba72?w=800&q=80",
     rating: 4.7, price: 2, bestTime: "May – Sep"
   },
 
@@ -371,28 +387,28 @@ const spots = [
     name: "Nepal Himalayas", location: "Nepal",
     tags: ["mountain", "cultural", "adventure"],
     desc: "Nepal contains eight of the world's 14 peaks above 8,000 m, including Everest (8,849 m), the highest point on Earth. The classic Everest Base Camp trek covers 130 km round-trip and passes through the Khumbu region, home to the Sherpa people whose culture dates back to Tibetan migration in the 16th century. Kathmandu's Durbar Square and the birthplace of Buddha at Lumbini are both UNESCO World Heritage Sites.",
-    image: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1585016495481-91613db79698?w=800&q=80",
     rating: 4.9, price: 1, bestTime: "Mar – May, Sep – Nov"
   },
   {
     name: "Scottish Highlands", location: "Scotland, UK",
     tags: ["mountain", "adventure"],
     desc: "The Highlands cover more than half of Scotland but are home to less than 2% of its population — one of the lowest population densities in Europe. Ben Nevis (1,345 m) is the tallest peak in the British Isles. The Great Glen, a fault line running diagonally across the Highlands, holds a chain of lochs including Loch Ness — 37 km long and deep enough to contain the entire population of Earth three times over in water volume.",
-    image: "https://images.unsplash.com/photo-1506377585622-bedcbb5a6d1d?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&q=80",
     rating: 4.6, price: 2, bestTime: "May – Sep"
   },
   {
     name: "Norwegian Fjords", location: "Norway",
     tags: ["mountain", "adventure"],
     desc: "The Norwegian fjords were carved by glaciers over 2.5 million years during the Ice Age, creating cliffs that plunge up to 1,300 m straight into seawater. Geirangerfjord and Nærøyfjord are UNESCO World Heritage Sites. The Flåm Railway, which descends 863 m in 20 km through mountain tunnels and past waterfalls, is frequently rated one of the world's most scenic rail journeys. Norway has the world's longest road tunnel (24.5 km, Lærdal Tunnel).",
-    image: "https://images.unsplash.com/photo-1531800109873-0c9f419f7981?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80",
     rating: 4.8, price: 3, bestTime: "May – Sep"
   },
   {
     name: "Azores", location: "Portugal (North Atlantic)",
     tags: ["mountain", "adventure"],
     desc: "Nine volcanic islands rising from the Mid-Atlantic Ridge, roughly equidistant between Europe and North America. São Miguel's Sete Cidades caldera contains two lakes — one blue, one green — separated only by a narrow bridge. Geothermal activity on the island of São Miguel is so intense that locals cook a traditional meat stew (cozido) underground in volcanic soil. Blue and sperm whales pass through Azorean waters year-round.",
-    image: "https://images.unsplash.com/photo-1564689750461-caefea1e0c73?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1548574505-5e239809ee19?w=800&q=80",
     rating: 4.7, price: 2, bestTime: "Apr – Oct"
   },
 
@@ -436,14 +452,14 @@ const spots = [
     name: "Singapore", location: "Southeast Asia",
     tags: ["city", "cultural"],
     desc: "A city-state of just 733 km² — about 3.5 times the size of Washington, D.C. — Singapore is consistently ranked the world's most visited city relative to its resident population. It transformed from a colonial trading post to one of the world's wealthiest nations in a single generation. Gardens by the Bay's iconic Supertrees (25–50 m tall vertical gardens) collect solar energy and harvest rainwater. Changi Airport has won the World's Best Airport title 12 consecutive times.",
-    image: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1508964942454-1a56651d54ac?w=800&q=80",
     rating: 4.7, price: 3, bestTime: "Feb – Apr"
   },
   {
     name: "Istanbul", location: "Turkey",
     tags: ["city", "cultural"],
     desc: "The only city in the world that spans two continents (Europe and Asia), divided by the Bosphorus strait. Istanbul has been the capital of three of history's greatest empires: Roman, Byzantine, and Ottoman. The Hagia Sophia, originally built as a cathedral in 537 AD, served as a mosque, then a museum, then a mosque again — its engineering was so advanced it held the record for the world's largest dome for nearly 1,000 years.",
-    image: "https://images.unsplash.com/photo-1527838832700-5059252407fa?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=800&q=80",
     rating: 4.8, price: 2, bestTime: "Apr – May, Sep – Nov"
   },
   {
@@ -459,6 +475,7 @@ const spots = [
     desc: "Prague Castle, founded in the 9th century, is the world's largest ancient castle complex — covering 70,000 m² with palaces, churches, galleries, and gardens. The city's medieval core escaped major damage during WWII, leaving centuries of Romanesque, Gothic, Baroque, and Art Nouveau architecture virtually intact. The Astronomical Clock (Orloj), installed in 1410, is the world's oldest functioning astronomical clock still in its original location.",
     image: "https://images.unsplash.com/photo-1541849546-216549ae216d?w=800&q=80",
     rating: 4.7, price: 1, bestTime: "May – Sep"
+  },
   },
   {
     name: "Dubai", location: "UAE",
@@ -501,14 +518,14 @@ const spots = [
     name: "Galápagos Islands", location: "Ecuador (Pacific Ocean)",
     tags: ["adventure"],
     desc: "Charles Darwin's 1835 visit to the Galápagos was instrumental in developing the theory of evolution by natural selection. The islands sit at the confluence of three major ocean currents, creating a unique marine ecosystem where sea lions swim with penguins and iguanas dive into the sea. 97% of the archipelago is designated national park, and marine life here — from whale sharks to manta rays — is so accustomed to humans it has no fear response.",
-    image: "https://images.unsplash.com/photo-1551264290-a1e7e9bc71ec?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=800&q=80",
     rating: 4.9, price: 3, bestTime: "Jun – Dec"
   },
   {
     name: "Amazon Rainforest", location: "Brazil & Peru",
     tags: ["adventure", "cultural"],
     desc: "The Amazon Basin covers 7 million km² across nine countries and contains 40,000 plant species, 1,300 bird species, and an estimated 10% of all species on Earth. The Amazon River discharges 20% of all freshwater entering the world's oceans. Indigenous communities in the region speak over 300 distinct languages. In peak wet season, the forest floor floods to depths of 10 m — trees have adapted to spend half the year underwater.",
-    image: "https://images.unsplash.com/photo-1619546813926-a78fa6372cd2?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1534786432-17f23db37f15?w=800&q=80",
     rating: 4.7, price: 2, bestTime: "Jun – Nov"
   },
 
@@ -545,35 +562,35 @@ const spots = [
     name: "Athens", location: "Greece",
     tags: ["cultural"],
     desc: "Athens is one of the world's oldest cities, with a recorded history spanning 3,400 years. The Acropolis hill has been continuously inhabited since the 4th millennium BC. The Parthenon, built between 447 and 432 BC, was a masterpiece of Doric architecture and served as a temple, a Christian church, and a mosque across its long history. Athens is widely considered the birthplace of democracy, philosophy, and the Olympic Games.",
-    image: "https://images.unsplash.com/photo-1555993539-1732b0258235?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1603565816030-6b389eeb23cb?w=800&q=80",
     rating: 4.7, price: 2, bestTime: "Apr – Jun, Sep – Oct"
   },
   {
     name: "Petra", location: "Jordan",
     tags: ["cultural", "adventure"],
     desc: "Petra was the capital of the Nabataean Kingdom from around 400 BC and its population once reached 30,000 people. Carved entirely into rose-red sandstone cliffs, the city's most famous structure — the Treasury (Al-Khazneh) — stands 43 m tall and was likely a royal tomb. The site was unknown to the Western world until Swiss explorer Johann Ludwig Burckhardt rediscovered it in 1812 by disguising himself as an Arab. It was voted one of the New Seven Wonders of the World in 2007.",
-    image: "https://images.unsplash.com/photo-1548686304-89d188a80029?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1579606032821-4e6161c81bd3?w=800&q=80",
     rating: 4.9, price: 2, bestTime: "Mar – May, Sep – Nov"
   },
   {
     name: "Angkor Wat", location: "Cambodia",
     tags: ["cultural"],
     desc: "Built during the Khmer Empire in the early 12th century by King Suryavarman II, Angkor Wat is the world's largest religious monument — covering 162 hectares. The temple complex represents Mount Meru (home of the gods in Hindu cosmology) and is aligned so precisely with cardinal directions that sunrise on the spring equinox falls perfectly over the central tower. The greater Angkor Archaeological Park contains over 1,000 temples spread across 400 km².",
-    image: "https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1599658880436-c61792e70672?w=800&q=80",
     rating: 4.8, price: 1, bestTime: "Nov – Feb"
   },
   {
     name: "Havana", location: "Cuba",
     tags: ["cultural", "city"],
     desc: "Founded by the Spanish in 1519, Havana's Old City (Habana Vieja) is a UNESCO World Heritage Site whose 900 buildings span five centuries of architecture — from 16th-century baroque fortresses to Art Deco masterpieces. Cuba's relative isolation since the 1960s US embargo created an extraordinary living time capsule: pre-revolution American cars (known as 'yank tanks') are still daily drivers, kept running for over 60 years through improvised mechanics.",
-    image: "https://images.unsplash.com/photo-1500789204598-39ab2ed4e7b6?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=800&q=80",
     rating: 4.5, price: 1, bestTime: "Dec – Apr"
   },
   {
     name: "Cairo & Giza", location: "Egypt",
     tags: ["cultural"],
     desc: "The Great Pyramid of Giza, built around 2560 BC for Pharaoh Khufu, is the only surviving structure of the original Seven Wonders of the Ancient World. For 3,800 years it held the record as the tallest man-made structure on Earth. The Cairo Egyptian Museum holds the world's largest collection of ancient Egyptian antiquities — over 120,000 items — including the intact tomb treasures of Tutankhamun discovered in 1922.",
-    image: "https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=800&q=80",
     rating: 4.7, price: 1, bestTime: "Oct – Apr"
   }
 ];
@@ -584,6 +601,24 @@ const spots = [
 const CARDS_PER_PAGE = 9;
 const priceMap   = { 1: "$ Budget", 2: "$$ Mid-range", 3: "$$$ Luxury" };
 const priceClass = { 1: "p1", 2: "p2", 3: "p3" };
+
+function gradientFor(tags) {
+  if (tags.includes("beach"))     return "linear-gradient(135deg,#0369a1,#0891b2)";
+  if (tags.includes("mountain"))  return "linear-gradient(135deg,#166534,#15803d)";
+  if (tags.includes("city"))      return "linear-gradient(135deg,#4c1d95,#7c3aed)";
+  if (tags.includes("adventure")) return "linear-gradient(135deg,#9d174d,#db2777)";
+  if (tags.includes("cultural"))  return "linear-gradient(135deg,#92400e,#d97706)";
+  return "linear-gradient(135deg,#1e3a5f,#2563eb)";
+}
+
+function emojiFor(tags) {
+  if (tags.includes("beach"))     return "🏖️";
+  if (tags.includes("mountain"))  return "🏔️";
+  if (tags.includes("city"))      return "🏙️";
+  if (tags.includes("adventure")) return "🧗";
+  if (tags.includes("cultural"))  return "🏛️";
+  return "🌍";
+}
 
 let currentFilter = "all";
 let pool = []; // filtered list
@@ -631,7 +666,11 @@ function render() {
 
   grid.innerHTML = shown.map((s, i) => `
     <div class="card" style="animation-delay:${i * 0.05}s">
-      <img class="card-img" src="${s.image}" alt="${s.name}" loading="lazy" />
+      <div class="card-img-wrap" style="background:${gradientFor(s.tags)}">
+        <div class="card-img-bg">${emojiFor(s.tags)}</div>
+        <img class="card-img" src="${s.image}" alt="${s.name}" loading="lazy"
+             onerror="this.style.opacity='0'" />
+      </div>
       <div class="card-body">
         <div class="card-tags">${tagHtml(s.tags)}</div>
         <h2 class="card-name">${s.name}</h2>
